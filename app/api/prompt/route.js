@@ -14,7 +14,7 @@ export async function POST(req) {
   } = body;
 
   const prompt = `
-Create a high-quality stylized character illustration.
+A high-quality semi-realistic chibi character illustration with balanced proportions (no oversized head).
 
 Character details:
 - Ethnicity: ${ethnicity}
@@ -28,8 +28,8 @@ Fashion:
 
 Art direction:
 - Style: ${artStyle}
-- Semi-realistic, polished, high-detail
-- Clean linework, soft lighting, premium finish
+- Soft airbrushed shading, polished finish
+- Clean linework, premium lighting
 - No text, no watermark, no distortion
 `.trim();
 
