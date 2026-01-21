@@ -183,7 +183,7 @@ South Asian / Bollywood style options:
 ${culturalBlock}
 ${nailsSection}
 ${faithBlock}
-${doggyBlock}
+${doggieSection}
 
 Footwear:
 - ${footwear}
