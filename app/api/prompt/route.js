@@ -102,7 +102,14 @@ Dog Companion:
 - Cute, chibi-styled, proportional to chibi character scale
 `
   : "";
-  
+  shoes = {
+  enabled: true,
+  type: "boots",
+  style: "chunky",
+  color: "black",
+  material: "leather",
+  details: "silver buckles"
+}
 
 const faithBlock =
   faithJewelry !== "none"
