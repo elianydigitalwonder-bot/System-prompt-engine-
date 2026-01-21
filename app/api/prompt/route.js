@@ -55,7 +55,30 @@ Art direction:
 - Clean linework, premium lighting
 - No text, no watermark, no distortion
 `.trim();
+const prompt = `
+A high-quality semi-realistic chibi character illustration with balanced proportions (no oversized head).
 
+Body proportions:
+- Feminine silhouette with a defined waist
+- Curvy upper body, elegant and stylized
+- Proportions appropriate for chibi style (cute, tasteful, non-exaggerated)
+
+Character details:
+- Ethnicity: ${ethnicity}
+- Skin tone: ${skinTone}
+- Hair style: ${hairStyle}
+- Hair color: ${hairColor}
+
+Fashion:
+- Era: ${fashionEra}
+- Overall vibe: ${vibe}
+
+Art direction:
+- Style: ${artStyle}
+- Soft airbrushed shading, polished finish
+- Clean linework, premium lighting
+- No text, no watermark, no distortion
+`.trim();
   return NextResponse.json({
     success: true,
     prompt
