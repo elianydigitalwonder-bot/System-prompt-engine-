@@ -1,170 +1,180 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const body = await req.json();
+  try {
+    // 1) Read the incoming user selections
+    const body = await req.json();
 
-  const {
-    ethnicity,
-    skinTone,
-    hairStyle,
-    hairColor,
-    fashionEra,
-    artStyle,
-    vibe
-  } = body;
+    // 2) Variables (user choices) with safe defaults
+    const {
+      // Identity
+      ethnicity = "User-selected",
+      skinTone = "User-selected",
+      ageGroup = "30-year-old",
+      genderPresentation = "woman",
 
-  const prompt = `
-A high-quality semi-realistic chibi character illustration with balanced proportions (no oversized head).
-const prompt = `
-A high-quality semi-realistic chibi character illustration with balanced proportions (no oversized head).
+      // Hair
+      hairType = "User-selected",
+      hairStyle = "User-selected",
+      hairColor = "User-selected",
 
-Body proportions:
-- Feminine silhouette with a defined waist
-- Curvy upper body, elegant and stylized
-- Proportions appropriate for chibi style (cute, tasteful, non-exaggerated)
-  const {
-  // Identity
-  ethnicity = "User-selected",
-  skinTone = "User-selected",
-  ageGroup = "30-year-old",
-  genderPresentation = "woman",
+      // Face / beauty
+      lipStyle = "User-selected",
+      nailStyle = "none",
+      makeupLevel = "natural",
 
-  // Hair
-  hairType = "User-selected",
-  hairStyle = "User-selected",
-  hairColor = "User-selected",
+      // Fashion
+      fashionEra = "modern",
+      vibe = "stylish",
+      outfitCategory = "User-selected",
+      artStyle = "semi-realistic airbrushed chibi",
 
-  // Face / beauty
-  lipStyle = "User-selected",
-  nailStyle = "none",            // e.g. "long acrylic nails", "French tips", "rhinestone nails"
-  makeupLevel = "natural",        // "natural" | "soft glam" | "bold glam"
+      // Clothing + cultural styling
+      clothingStyle = "User-selected",
+      modestAttire = "none",
+      muslimAttire = "none",
+      bollywoodOutfit = "none",
+      culturalNotes = "none",
 
-  // Fashion
-  fashionEra = "modern",          // "1980s" | "1990s" | "early 2000s" | "modern"
-  vibe = "stylish",
-  outfitCategory = "User-selected",
-  artStyle = "semi-realistic airbrushed chibi",
+      // Footwear / accessories / actions
+      footwear = "User-selected",
+      accessories = "User-selected",
 
-  // Clothing + cultural styling
-  clothingStyle = "User-selected",           // general description
-  modestAttire = "none",                     // "none" | "muslim_modest" | "christian_modest" | "catholic_modest"
-  muslimAttire = "none",                     // "none" | "hijab" | "abaya" | "modest_long_dress_with_hijab"
-  bollywoodOutfit = "none",                  // "none" | "lehenga" | "saree_modern_drape" | "anarkali" | "embellished_set"
-  culturalNotes = "none",                    // optional free text: "festival look", "wedding guest", etc.
+      doggyBagGlamour = false,
+      dogCarrierStyle = "User-selected",
+      dogStyleDetails = "User-selected",
 
-  // Footwear
-  footwear = "User-selected",
+      faithJewelry = "none",
+      faithJewelryItems = "User-selected",
 
-  // Accessories
-  accessories = "User-selected",
-  doggyBagGlamour = false,                   // true/false
-  dogCarrierStyle = "User-selected",
-  dogStyleDetails = "User-selected",
+      actionPose = "none",
+      prop = "none",
 
-  // Faith jewelry / symbols (OPTIONAL, only if user chooses)
-  faithJewelry = "none",                     // "none" | "christian" | "catholic"
-  faithJewelryItems = "User-selected",       // e.g. "cross necklace, rosary bracelet, medallion"
+      // Output format
+      renderFormat = "waist-up",
+      transparentBackground = "optional"
+    } = body;
 
-  // Actions / props
-  actionPose = "none",
-  prop = "none",
+    // Optional blocks (only show when selected)
+    const doggyBlock = doggyBagGlamour
+      ? `
+Doggy Bag Glamour 🐶✨ (optional):
+- Pet carrier style: ${dogCarrierStyle}
+- Dog styling details: ${dogStyleDetails}
+`
+      : "";
 
-  // Output format
-  renderFormat = "waist-up",                 // "waist-up" | "full-body" | "sticker"
-  transparentBackground = "optional"
-} = body;
-const {
-  // Identity
-  ethnicity = "User-selected",
-  skinTone = "User-selected",
-  ageGroup = "30-year-old",
-  genderPresentation = "woman",
+    const culturalBlock =
+      modestAttire !== "none" ||
+      muslimAttire !== "none" ||
+      bollywoodOutfit !== "none" ||
+      culturalNotes !== "none"
+        ? `
+Cultural & modest styling (optional, user-selected):
+- Modest attire: ${modestAttire}
+- Muslim attire: ${muslimAttire}
+- Bollywood outfit: ${bollywoodOutfit}
+- Cultural notes: ${culturalNotes}
+`
+        : "";
 
-  // Hair
-  hairType = "User-selected",
-  hairStyle = "User-selected",
-  hairColor = "User-selected",
+    const faithBlock =
+      faithJewelry !== "none"
+        ? `
+Faith-based jewelry (optional, only if selected):
+- Faith jewelry: ${faithJewelry}
+- Items: ${faithJewelryItems}
+`
+        : "";
 
-  // Face / beauty
-  lipStyle = "glossy lips",
-  nailStyle = "User-selected (optional)",
-  makeupLevel = "User-selected (optional)",
-
-  // Fashion
-  fashionEra = "modern",
-  vibe = "stylish",
-  outfitCategory = "User-selected",
-  artStyle = "semi-realistic airbrushed chibi",
-
-  // Footwear
-  footwear = "User-selected",
-
-  // Accessories
-  accessories = "User-selected",
-  doggyBagGlamour = "off", // "off" | "on"
-  dogCarrierStyle = "User-selected (optional)",
-  dogStyleDetails = "User-selected (optional)",
-
-  // Faith jewelry
-  faithJewelry = "none", // "none" | "christian_catholic"
-
-  // Actions / poses
-  actionPose = "User-selected (optional)",
-  prop = "User-selected (optional)",
-
-  // Output format
-  renderFormat = "waist-up", // "waist-up" | "full-body" | "sticker"
-  transparentBackground = "optional"
-} = body;
-Character details:
-- Ethnicity: ${ethnicity}
-- Skin tone: ${skinTone}
-- Hair style: ${hairStyle}
-- Hair color: ${hairColor}
-
-Fashion:
-- Era: ${fashionEra}
-- Overall vibe: ${vibe}
-
-Art direction:
-- Style: ${artStyle}
-- Soft airbrushed shading, polished finish
-- Clean linework, premium lighting
-- No text, no watermark, no distortion
-`.trim();
-Character details:
-- Ethnicity: ${ethnicity}
-- Skin tone: ${skinTone}
-- Hair style: ${hairStyle}
-- Hair color: ${hairColor}
-
-Fashion:
-- Era: ${fashionEra}
-- Overall vibe: ${vibe}
-
-Art direction:
-- Style: ${artStyle}
-- Soft airbrushed shading, polished finish
-- Clean linework, premium lighting
-- No text, no watermark, no distortion
-`.trim();
-const prompt = `
-A high-quality semi-realistic chibi character illustration with balanced proportions (no oversized head).
+    // 3) Build the master prompt (this is what the user copies to any generator)
+    const prompt = `
+A high-quality semi-realistic chibi character illustration (cute proportions, NOT an oversized head).
 
 Body proportions:
-- Feminine silhouette with a defined waist
-- Curvy upper body, elegant and stylized
-- Proportions appropriate for chibi style (cute, tasteful, non-exaggerated)
+- Feminine silhouette with defined waist
+- Balanced chibi proportions, elegant and stylized
+- Full-body or waist-up based on user selection
 
 Character details:
+- Age: ${ageGroup}
+- Gender presentation: ${genderPresentation}
 - Ethnicity: ${ethnicity}
 - Skin tone: ${skinTone}
+- Hair texture: ${hairType}
 - Hair style: ${hairStyle}
 - Hair color: ${hairColor}
 
-Fashion:
-- Era: ${fashionEra}
-- Overall vibe: ${vibe}
+Facial & beauty details:
+- Large expressive eyes with glossy highlights
+- Soft blush, freckles optional
+- Lip style: ${lipStyle}
+- Makeup level: ${makeupLevel}
+- Nail style (optional): ${nailStyle}
+
+Fashion era & vibe:
+- Fashion era: ${fashionEra} (80s, 90s, 2000s, modern)
+- Overall vibe: ${vibe} (luxury, street, glam, soft, editorial)
+
+Clothing & outfit selection:
+- Outfit category: ${outfitCategory}
+- Clothing style: ${clothingStyle}
+
+Street & casual wear options:
+- crop top and jogger set
+- hoodie and matching sweatpants
+- oversized jacket with fitted pants
+- denim co-ord set
+- glam lounge set
+
+Swim & resort wear options:
+- bikini set
+- two-piece bikini
+- high-waisted bikini
+- bikini with matching sarong
+- resort maxi dress
+- poolside cover-up
+
+Modest & cultural wear options:
+- hijab with coordinated outfit
+- abaya-inspired fashion look
+- modest long dress with layered styling
+
+South Asian / Bollywood style options:
+- lehenga set
+- saree-inspired modern drape
+- anarkali-style dress
+- embellished Bollywood glam outfit
+
+${culturalBlock}
+
+Footwear:
+- ${footwear}
+
+### Accessories:
+- ${accessories}
+
+${doggyBlock}
+
+${faithBlock}
+
+Action & lifestyle poses (options):
+- holding a daiquiri or cocktail
+- rollerblading pose
+- skiing pose
+- yoga balance pose
+- surfing with board
+- snorkeling gear
+- confident lifestyle stance
+
+User-selected controls summary:
+- Action/pose: ${actionPose}
+- Prop: ${prop}
+- Render format: ${renderFormat}
+- Transparent background: ${transparentBackground}
+
+Sticker rules (optional):
+- If sticker mode is selected: full-body chibi, bold clean outlines, simplified shading, high contrast, clear silhouette, minimal background.
 
 Art direction:
 - Style: ${artStyle}
@@ -172,8 +182,12 @@ Art direction:
 - Clean linework, premium lighting
 - No text, no watermark, no distortion
 `.trim();
-  return NextResponse.json({
-    success: true,
-    prompt
-  });
+
+    return NextResponse.json({ success: true, prompt });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: "Failed to generate prompt." },
+      { status: 400 }
+    );
+  }
 }
