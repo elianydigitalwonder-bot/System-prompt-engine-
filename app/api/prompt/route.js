@@ -90,11 +90,16 @@ Nails:
 - Elegant, proportional to chibi hands
 `
   : '';
-// ~ line 94
 const doggieSection = doggie?.enabled
   ? `
 Dog Companion:
-...
+- Species: ${doggie.species ?? "dog"}
+- Breed: ${doggie.breed ?? "unspecified"}
+- Size: ${doggie.size ?? "small"}
+- Color: ${doggie.color ?? "natural"}
+- Personality: ${doggie.personality ?? "friendly"}
+- Accessories: ${doggie.accessories ?? "none"}
+- Cute, chibi-styled, proportional to chibi character scale
 `
   : "";
   
