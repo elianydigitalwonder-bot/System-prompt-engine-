@@ -90,6 +90,10 @@ Nails:
 `
   : '';
 
+
+
+  
+
 const faithBlock =
   faithJewelry !== "none"
     ? `
