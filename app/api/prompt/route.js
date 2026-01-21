@@ -90,7 +90,13 @@ Nails:
 - Elegant, proportional to chibi hands
 `
   : '';
-
+// ~ line 94
+const doggieSection = doggie?.enabled
+  ? `
+Dog Companion:
+...
+`
+  : "";
   
 
 const faithBlock =
