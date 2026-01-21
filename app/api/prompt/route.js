@@ -91,8 +91,6 @@ Nails:
 `
   : '';
 
-
-
   
 
 const faithBlock =
