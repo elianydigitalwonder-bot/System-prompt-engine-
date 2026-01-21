@@ -77,7 +77,26 @@ Cultural & modest styling (optional, user-selected):
 - Cultural notes: ${culturalNotes}
 `
         : "";
+// Optional blocks (only show when selected)
 
+const nailsSection = nails?.enabled
+  ? `
+Nails:
+- Length: ${nails.length}
+- Shape: ${nails.shape}
+- Color: ${nails.color}
+- Finish: ${nails.finish}
+- Elegant, proportional to chibi hands
+`
+  : '';
+
+const faithBlock =
+  faithJewelry !== "none"
+    ? `
+Faith-based jewelry (optional, only if selected):
+...
+`
+    : "";
     const faithBlock =
       faithJewelry !== "none"
         ? `
