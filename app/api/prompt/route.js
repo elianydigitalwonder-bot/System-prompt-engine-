@@ -22,7 +22,49 @@ Body proportions:
 - Feminine silhouette with a defined waist
 - Curvy upper body, elegant and stylized
 - Proportions appropriate for chibi style (cute, tasteful, non-exaggerated)
+const {
+  // Identity
+  ethnicity = "User-selected",
+  skinTone = "User-selected",
+  ageGroup = "30-year-old",
+  genderPresentation = "woman",
 
+  // Hair
+  hairType = "User-selected",
+  hairStyle = "User-selected",
+  hairColor = "User-selected",
+
+  // Face / beauty
+  lipStyle = "glossy lips",
+  nailStyle = "User-selected (optional)",
+  makeupLevel = "User-selected (optional)",
+
+  // Fashion
+  fashionEra = "modern",
+  vibe = "stylish",
+  outfitCategory = "User-selected",
+  artStyle = "semi-realistic airbrushed chibi",
+
+  // Footwear
+  footwear = "User-selected",
+
+  // Accessories
+  accessories = "User-selected",
+  doggyBagGlamour = "off", // "off" | "on"
+  dogCarrierStyle = "User-selected (optional)",
+  dogStyleDetails = "User-selected (optional)",
+
+  // Faith jewelry
+  faithJewelry = "none", // "none" | "christian_catholic"
+
+  // Actions / poses
+  actionPose = "User-selected (optional)",
+  prop = "User-selected (optional)",
+
+  // Output format
+  renderFormat = "waist-up", // "waist-up" | "full-body" | "sticker"
+  transparentBackground = "optional"
+} = body;
 Character details:
 - Ethnicity: ${ethnicity}
 - Skin tone: ${skinTone}
