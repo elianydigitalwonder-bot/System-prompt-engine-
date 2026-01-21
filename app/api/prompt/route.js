@@ -172,6 +172,9 @@ South Asian / Bollywood style options:
 - embellished Bollywood glam outfit
 
 ${culturalBlock}
+${nailsSection}
+${faithBlock}
+${doggyBlock}
 
 Footwear:
 - ${footwear}
