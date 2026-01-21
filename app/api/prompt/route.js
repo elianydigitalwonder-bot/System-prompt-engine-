@@ -79,6 +79,7 @@ Cultural & modest styling (optional, user-selected):
         : "";
 // Optional blocks (only show when selected)
 
+
 const nailsSection = nails?.enabled
   ? `
 Nails:
