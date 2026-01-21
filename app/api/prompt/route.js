@@ -27,7 +27,7 @@ export async function POST(req) {
       fashionEra = "modern",
       vibe = "stylish",
       outfitCategory = "User-selected",
-      artStyle = "semi-realistic airbrushed chibi",
+      artStyle = "semi-realistic airbrusheccd chibi",
 
       // Clothing + cultural styling
       clothingStyle = "User-selected",
@@ -115,16 +115,8 @@ Facial & beauty details:
 Fashion era & vibe:
 - Fashion era: ${fashionEra} (80s, 90s, 2000s, modern)
 - Overall vibe: ${vibe} (luxury, street, glam, soft, editorial)
-const nailsSection = nails?.enabled
-  ? `
-Nails:
-- Length: ${nails.length}
-- Shape: ${nails.shape}
-- Color: ${nails.color}
-- Finish: ${nails.finish}
-- Elegant, proportional to chibi hands
-`
-  : '';
+
+
 Clothing & outfit selection:
 - Outfit category: ${outfitCategory}
 - Clothing style: ${clothingStyle}
