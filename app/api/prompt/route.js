@@ -180,13 +180,9 @@ Footwear:
 - ${footwear}
 
 ### Accessories:
-- ${accessories}
+- ${accessories}}
 
-${doggyBlock}
-
-${faithBlock}
-
-Action & lifestyle poses (options):
+Action & lifestyle pose s (options):
 - holding a daiquiri or cocktail
 - rollerblading pose
 - skiing pose
