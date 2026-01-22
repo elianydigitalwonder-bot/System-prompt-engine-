@@ -144,7 +144,18 @@ Character details:
 - Hair texture: ${hairType}
 - Hair style: ${hairStyle}
 - Hair color: ${hairColor}
-
+${isMale ? `
+Body & physique (male):
+- Athletic, muscular build with broad shoulders
+- Defined chest, arms, and legs
+- Strong, confident posture
+- Stylized chibi proportions with heroic physique
+` : `
+Body & physique (female):
+- Soft, curvy silhouette with elegant proportions
+- Feminine shape with balanced chibi anatomy
+- Graceful posture and smooth contours
+`}
 Facial & beauty details:
 - Large expressive eyes with glossy highlights
 - Soft blush, freckles optional
