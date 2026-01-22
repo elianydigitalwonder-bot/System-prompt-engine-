@@ -54,6 +54,7 @@ characterGender = "female",
       renderFormat = "waist-up",
       transparentBackground = "optional"
     } = body;
+    const isMale = characterGender === "male";
 const isMale = characterGender === "male";
     // Optional blocks (only show when selected)
     const doggyBlock = doggyBagGlamour
@@ -105,13 +106,15 @@ Dog Companion:
 
 const shoesSection = shoes?.enabled
   ? `
-Footwear:
-- Type: ${shoes.type ?? "sneakers"}
-- Style: ${shoes.style ?? "casual"}
-- Color: ${shoes.color ?? "neutral"}
-- Material: ${shoes.material ?? "leather"}
-- Details: ${shoes.details ?? "clean, minimal"}
-- Proportional to chibi feet, clean silhouette
+Footwear (${isMale ? "male" : "female"}):
+- Type: ${shoes.type ?? (isMale ? "chunky sneakers" : "sparkly sandals")}
+- Style: ${shoes.style ?? (isMale ? "street-lux" : "glam")}
+- Color: ${shoes.color ?? "neon + metallic mix"}
+- Material: ${shoes.material ?? "mixed materials (leather + mesh + accents)"}
+- Details: ${shoes.details ?? "bold statement details: sparkles, glossy panels, straps, buckles, or futuristic shapes"}
+- Funky options: neon sneakers, platform boots, glitter sandals, metallic loafers, colorful high-tops, winter boots with bright laces
+- Seasonal flexibility: beach sandals (sparkly), fall boots (chunky), winter boots (lined), spring sneakers (color-pop)
+- Proportional to chibi feet, clean silhouette, high-fashion vibe
 `
   : "";
 
