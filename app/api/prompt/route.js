@@ -161,6 +161,15 @@ Clothing & outfit selection (${characterGender}):
 - Outfit category: ${outfitCategory}
 - Clothing style: ${clothingStyle}
 
+${isMale ? `
+Male clothing options:
+- tailored suit set (blazer + fitted trousers)
+- luxury streetwear set (oversized jacket + tapered pants)
+- resort set (open shirt + tailored shorts)
+- athleisure set (tank/tee + joggers)
+- denim jacket + fitted jeans
+- winter coat + layered knit set
+` : `
 Street & casual wear options:
 - crop top and jogger set
 - hoodie and matching sweatpants
@@ -175,6 +184,7 @@ Swim & resort wear options:
 - bikini with matching sarong
 - resort maxi dress
 - poolside cover-up
+`}
 
 Modest & cultural wear options:
 - hijab with coordinated outfit
