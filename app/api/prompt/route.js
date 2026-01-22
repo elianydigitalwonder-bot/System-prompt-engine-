@@ -191,7 +191,9 @@ ${culturalSection}
 ${nailsSection}
 ${faithBlock}
 ${doggieSection}
-
+${shoesSection}
+${accessoriesSection}
+${outfitSection}
 
 
 
