@@ -54,7 +54,7 @@ characterGender = "female",
       renderFormat = "waist-up",
       transparentBackground = "optional"
     } = body;
-
+const isMale = characterGender === "male";
     // Optional blocks (only show when selected)
     const doggyBlock = doggyBagGlamour
       ? `
