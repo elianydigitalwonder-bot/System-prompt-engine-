@@ -187,10 +187,13 @@ South Asian / Bollywood style options:
 - anarkali-style dress
 - embellished Bollywood glam outfit
 
-${culturalBlock}
+${culturalSection}
 ${nailsSection}
 ${faithBlock}
 ${doggieSection}
+
+
+
 
 Footwear:
 - ${footwear}
