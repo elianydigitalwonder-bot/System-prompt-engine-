@@ -49,7 +49,7 @@ export async function POST(req) {
 
       actionPose = "none",
       prop = "none",
-
+characterGender = "female",
       // Output format
       renderFormat = "waist-up",
       transparentBackground = "optional"
