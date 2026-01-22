@@ -115,21 +115,17 @@ Footwear:
 `
   : "";
 
-const faithBlock =
-  faithJewelry !== "none"
-    ? `
-Faith-based jewelry (optional, only if selected):
-...
+const accessoriesSection = accessories?.enabled
+  ? `
+Accessories:
+- Type: ${accessories.type ?? "statement pieces"}
+- Style: ${accessories.style ?? "super funky"}
+- Color: ${accessories.color ?? "vibrant"}
+- Material: ${accessories.material ?? "mixed materials"}
+- Details: ${accessories.details ?? "bold shapes, sparkles, playful accents"}
+- Exaggerated, fashion-forward accessories scaled for chibi proportions, expressive and eye-catching without overwhelming the character
 `
-    : "";
-    const faithBlock =
-      faithJewelry !== "none"
-        ? `
-Faith-based jewelry (optional, only if selected):
-- Faith jewelry: ${faithJewelry}
-- Items: ${faithJewelryItems}
-`
-        : "";
+  : "";
 
     // 3) Build the master prompt (this is what the user copies to any generator)
     const prompt = `
