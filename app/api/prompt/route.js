@@ -185,8 +185,15 @@ Swim & resort wear options:
 - resort maxi dress
 - poolside cover-up
 `}
-
-Modest & cultural wear options:
+${isMale ? `
+Male modest & cultural wear options:
+- tailored thobe or kandura
+- fitted long tunic with structured trousers
+- traditional-inspired outfit with masculine tailoring
+- modest layered look with long coat
+- clean, elegant cultural formalwear
+` : `
+Female modest & cultural wear options:
 - hijab with coordinated outfit
 - abaya-inspired fashion look
 - modest long dress with layered styling
@@ -196,6 +203,8 @@ South Asian / Bollywood style options:
 - saree-inspired modern drape
 - anarkali-style dress
 - embellished Bollywood glam outfit
+`}
+
 
 ${culturalSection}
 ${nailsSection}
@@ -204,8 +213,6 @@ ${doggieSection}
 ${shoesSection}
 ${accessoriesSection}
 ${outfitSection}
-
-
 
 Footwear:
 - ${footwear}
