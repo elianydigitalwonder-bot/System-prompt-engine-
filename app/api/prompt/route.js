@@ -157,7 +157,7 @@ Fashion era & vibe:
 - Overall vibe: ${vibe} (luxury, street, glam, soft, editorial)
 
 
-Clothing & outfit selection:
+Clothing & outfit selection (${characterGender}):
 - Outfit category: ${outfitCategory}
 - Clothing style: ${clothingStyle}
 
