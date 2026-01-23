@@ -46,7 +46,7 @@ export async function POST(req) {
 
       faithJewelry = "none",
       faithJewelryItems = "User-selected",
-
+tattoos = { enabled: false },
       actionPose = "none",
       prop = "none",
 characterGender = "female",
@@ -55,7 +55,6 @@ characterGender = "female",
       transparentBackground = "optional"
     } = body;
     const isMale = characterGender === "male";
-const isMale = characterGender === "male";
     // Optional blocks (only show when selected)
     const doggyBlock = doggyBagGlamour
       ? `
@@ -68,6 +67,18 @@ Doggy Bag Glamour 🐶✨ (optional):
     const culturalBlock =
       modestAttire !== "none" ||
       muslimAttire !== "none" ||
+ const tattooSection = tattoos?.enabled
+  ? `
+Tattoos (${isMale ? "male" : "female"}):
+- Style: ${tattoos.style ?? (isMale ? "bold blackwork, realism, geometric" : "fine-line, floral, ornamental")}
+- Placement: ${tattoos.placement ?? (isMale ? "arms, chest, shoulders" : "arms, back, ribs, thigh")}
+- Density: ${tattoos.density ?? "balanced, stylish"}
+- Color: ${tattoos.color ?? (isMale ? "black and grey" : "black with subtle color accents")}
+- Aesthetic: high-fashion, editorial tattoo design
+- Clean linework, sharp details, no distortion
+- Scaled perfectly to chibi proportions (stylized, not overcrowded)
+`
+  : "";
       bollywoodOutfit !== "none" ||
       culturalNotes !== "none"
         ? `
@@ -251,6 +262,9 @@ User-selected controls summary:
 
 Sticker rules (optional):
 - If sticker mode is selected: full-body chibi, bold clean outlines, simplified shading, high contrast, clear silhouette, minimal background.
+${tattooSection}
+${shoesSection}
+${accessoriesSection}
 
 Art direction:
 - Style: ${artStyle}
@@ -258,12 +272,11 @@ Art direction:
 - Clean linework, premium lighting
 - No text, no watermark, no distortion
 `.trim();
-
-    return NextResponse.json({ success: true, prompt });
-  } catch (err) {
-    return NextResponse.json(
+    
+    
       { success: false, error: "Failed to generate prompt." },
       { status: 400 }
-    );
-  }
-}
+.trim();
+    
+  
+
