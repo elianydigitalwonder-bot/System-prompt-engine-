@@ -67,18 +67,53 @@ Doggy Bag Glamour 🐶✨ (optional):
     const culturalBlock =
       modestAttire !== "none" ||
       muslimAttire !== "none" ||
- const tattooSection = tattoos?.enabled
+ const tattooSection = tattoos?.const tattooSection = tattoos?.enabled
   ? `
 Tattoos (${isMale ? "male" : "female"}):
-- Style: ${tattoos.style ?? (isMale ? "bold blackwork, realism, geometric" : "fine-line, floral, ornamental")}
-- Placement: ${tattoos.placement ?? (isMale ? "arms, chest, shoulders" : "arms, back, ribs, thigh")}
-- Density: ${tattoos.density ?? "balanced, stylish"}
-- Color: ${tattoos.color ?? (isMale ? "black and grey" : "black with subtle color accents")}
-- Aesthetic: high-fashion, editorial tattoo design
-- Clean linework, sharp details, no distortion
-- Scaled perfectly to chibi proportions (stylized, not overcrowded)
+
+- Style: ${
+    tattoos.style ??
+    (isMale
+      ? "bold blackwork / geometric / realism accents"
+      : "fine-line / delicate floral / minimalist symbols")
+  }
+
+- Motif / theme: ${
+    tattoos.motif ??
+    (isMale
+      ? "geometric shapes, lions, dragons, tribal-inspired patterns, abstract lines"
+      : "butterflies, roses, stars, hearts, tiny symbols, elegant script")
+  }
+
+- Placement: ${
+    tattoos.placement ??
+    (isMale
+      ? "forearm, upper arm, shoulder, chest (optional), back"
+      : "wrist, forearm, shoulder, collarbone, upper back")
+  }
+
+- Coverage: ${
+    tattoos.coverage ??
+    (isMale ? "medium (1–3 areas)" : "light (1–2 small areas)")
+  }
+
+- Color: ${
+    tattoos.color ??
+    (isMale ? "black + grey shading" : "black with subtle color accents")
+  }
+
+- Detail level: ${
+    tattoos.detail ??
+    "clean linework, sharp edges, readable at chibi scale (not overcrowded)"
+  }
+
+- Rules:
+  - avoid face tattoos
+  - keep tattoos stylish + editorial (no clutter)
+  - scale perfectly to chibi proportions
 `
   : "";
+  
       bollywoodOutfit !== "none" ||
       culturalNotes !== "none"
         ? `
@@ -230,28 +265,6 @@ South Asian / Bollywood style options:
 - embellished Bollywood glam outfit
 `}
 
-
-${culturalSection}
-${nailsSection}
-${faithBlock}
-${doggieSection}
-${shoesSection}
-${accessoriesSection}
-${outfitSection}
-
-Footwear:
-- ${footwear}
-
-### Accessories:
-- ${accessories}}
-
-Action & lifestyle pose s (options):
-- holding a daiquiri or cocktail
-- rollerblading pose
-- skiing pose
-- yoga balance pose
-- surfing with board
-- snorkeling gear
 - confident lifestyle stance
 
 User-selected controls summary:
@@ -272,7 +285,6 @@ Art direction:
 - Clean linework, premium lighting
 - No text, no watermark, no distortion
 `.trim();
-    
     
       { success: false, error: "Failed to generate prompt." },
       { status: 400 }
