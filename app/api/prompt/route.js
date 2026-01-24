@@ -62,54 +62,35 @@ Doggy Bag Glamour 🐶✨ (optional):
 - Pet carrier style: ${dogCarrierStyle}
 - Dog styling details: ${dogStyleDetails}
 `
-      : "";
-
-    const culturalBlock =
-      modestAttire !== "none" ||
-      muslimAttire !== "none" ||const tattooSection = tattoos?.enabled
+      : "";const tattooSection = tattoos?.enabled
   ? `
 Tattoos (${isMale ? "male" : "female"}):
-- Style: ${
-    tattoos.style ??
-    (isMale
-      ? "bold blackwork, geometric, realism accents"
-      : "fine-line, delicate floral, minimalist symbols")
-  }
-- Motif / theme: ${
-    tattoos.motif ??
-    (isMale
-      ? "geometric shapes, lions, dragons, abstract lines, tribal-inspired patterns"
-      : "butterflies, roses, stars, hearts, tiny symbols, elegant script")
-  }
-- Placement: ${
-    tattoos.placement ??
-    (isMale
-      ? "forearm, upper arm, shoulder, chest (optional), back"
-      : "wrist, forearm, shoulder, collarbone, upper back")
-  }
-- Coverage: ${
-    tattoos.coverage ??
-    (isMale
-      ? "medium (1–3 areas)"
-      : "light (1–2 small areas)")
-  }
-- Color: ${
-    tattoos.color ??
-    (isMale
-      ? "black with grey shading"
-      : "black with subtle color accents")
-  }
-- Detail level: ${
-    tattoos.detail ??
-    "clean linework, sharp edges, readable at chibi scale (not overcrowded)"
-  }
+- Style: ${tattoos.style ?? (isMale
+  ? "bold blackwork, geometric, realism accents"
+  : "fine-line, delicate floral, minimalist symbols")}
+- Motif / theme: ${tattoos.motif ?? (isMale
+  ? "geometric shapes, lions, dragons, abstract lines, tribal-inspired patterns"
+  : "butterflies, roses, stars, hearts, tiny symbols, elegant script")}
+- Placement: ${tattoos.placement ?? (isMale
+  ? "forearm, upper arm, shoulder, chest (optional), back"
+  : "wrist, forearm, shoulder, collarbone, upper back")}
+- Coverage: ${tattoos.coverage ?? (isMale
+  ? "medium (1–3 areas)"
+  : "light (1–2 small areas)")}
+- Color: ${tattoos.color ?? (isMale
+  ? "black with grey shading"
+  : "black with subtle color accents")}
+- Detail level: ${tattoos.detail ?? "clean linework, sharp edges, readable at chibi scale (not overcrowded)"}
 - Rules:
   - avoid face tattoos
   - keep tattoos stylish and editorial (no clutter)
   - scale perfectly to chibi proportions
 `
   : "";
- 
+
+    const culturalBlock =
+      modestAttire !== "none" ||
+      muslimAttire !== "none" ||const tattooSection = tattoos?.enabled
    
       bollywoodOutfit !== "none" ||
       culturalNotes !== "none"
