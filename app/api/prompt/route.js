@@ -19,52 +19,44 @@ export async function POST(req) {
       hairStyle = "User-selected",
       hairColor = "User-selected",
 
-      // Face / beauty
+      // Beauty
+      makeupLevel = "natural",
       lipStyle = "User-selected",
       nails = { enabled: false },
-      makeupLevel = "natural",
 
       // Fashion
       fashionEra = "modern",
       vibe = "stylish",
       outfitCategory = "User-selected",
+      clothingStyle = "User-selected",
       artStyle = "semi-realistic airbrushed chibi",
 
-      // Clothing + cultural styling
-      clothingStyle = "User-selected",
+      // Cultural / modest
       modestAttire = "none",
       muslimAttire = "none",
       bollywoodOutfit = "none",
       culturalNotes = "none",
 
-      // Footwear / accessories
+      // Extras
       shoes = { enabled: false },
       accessories = { enabled: false },
+      tattoos = { enabled: false },
 
-      // Doggy glam (optional)
+      // Doggy glam
       doggyBagGlamour = false,
       dogCarrierStyle = "User-selected",
       dogStyleDetails = "User-selected",
 
-      // Tattoos (optional)
-      tattoos = { enabled: false },
+      // NEW: Travel & lifestyle
+      bags = { enabled: false },
+      sunglasses = { enabled: false },
+      headphones = { enabled: false },
 
-      // Actions / props
+      // Scene controls
       actionPose = "none",
       prop = "none",
-
-      // Output format
       renderFormat = "waist-up",
       transparentBackground = "optional",
-
-      // NEW: Bags / travel
-      bags = { enabled: false },
-
-      // NEW: Sunglasses
-      sunglasses = { enabled: false },
-
-      // NEW: Headphones
-      headphones = { enabled: false },
     } = body ?? {};
 
     const isMale =
@@ -72,16 +64,22 @@ export async function POST(req) {
       String(genderPresentation).toLowerCase() === "man";
 
     // ----------------------------
-    // 2) Optional sections (SAFE)
+    // 2) SAFE OPTIONAL BLOCKS
     // ----------------------------
 
-    const doggySection = doggyBagGlamour
+    const bodyBlock = isMale
       ? `
-Doggy Bag Glamour 🐶✨ (optional):
-- Pet carrier style: ${dogCarrierStyle}
-- Dog styling details: ${dogStyleDetails}
+Body & physique:
+- Athletic, muscular build
+- Broad shoulders, defined arms
+- Heroic chibi proportions
 `
-      : "";
+      : `
+Body & physique:
+- Soft, elegant silhouette
+- Balanced feminine proportions
+- Graceful chibi anatomy
+`;
 
     const culturalBlock =
       modestAttire !== "none" ||
@@ -89,7 +87,7 @@ Doggy Bag Glamour 🐶✨ (optional):
       bollywoodOutfit !== "none" ||
       culturalNotes !== "none"
         ? `
-Cultural & modest styling (optional, user-selected):
+Cultural & modest styling:
 - Modest attire: ${modestAttire}
 - Muslim attire: ${muslimAttire}
 - Bollywood outfit: ${bollywoodOutfit}
@@ -99,26 +97,24 @@ Cultural & modest styling (optional, user-selected):
 
     const modestCulturalBlock = isMale
       ? `
-Male modest & cultural wear options (if relevant):
+Male modest & cultural wear options:
 - tailored thobe or kandura
-- fitted long tunic with structured trousers
-- traditional-inspired outfit with masculine tailoring
-- modest layered look with long coat
-- clean, elegant cultural formalwear
+- long tunic with trousers
+- traditional layered coat
 `
       : `
-Female modest & cultural wear options (if relevant):
+Female modest & cultural wear options:
 - hijab with coordinated outfit
-- abaya-inspired fashion look
-- modest long dress with layered styling
+- abaya-inspired fashion
+- modest long dress
 `;
 
     const bollywoodBlock = `
-South Asian / Bollywood style options (if relevant):
+South Asian / Bollywood style options:
 - lehenga set
 - saree-inspired modern drape
 - anarkali-style dress
-- embellished Bollywood glam outfit
+- embellished Bollywood glam
 `;
 
     const nailsSection = nails?.enabled
@@ -128,7 +124,6 @@ Nails:
 - Shape: ${nails.shape ?? "almond"}
 - Color: ${nails.color ?? "neutral"}
 - Finish: ${nails.finish ?? "glossy"}
-- Elegant, proportional to chibi hands
 `
       : "";
 
@@ -136,11 +131,8 @@ Nails:
       ? `
 Footwear:
 - Type: ${shoes.type ?? (isMale ? "chunky sneakers" : "sparkly sandals")}
-- Style: ${shoes.style ?? (isMale ? "street-lux" : "glam")}
-- Color: ${shoes.color ?? "neon + metallic mix"}
-- Material: ${shoes.material ?? "mixed materials (leather + mesh + accents)"}
-- Details: ${shoes.details ?? "bold statement details: sparkles, glossy panels, hardware"}
-- Proportional to chibi feet, clean silhouette, high-fashion vibe
+- Style: ${shoes.style ?? "fashion-forward"}
+- Color: ${shoes.color ?? "coordinated with outfit"}
 `
       : "";
 
@@ -148,133 +140,89 @@ Footwear:
       ? `
 Accessories:
 - Type: ${accessories.type ?? "statement pieces"}
-- Style: ${accessories.style ?? "super funky"}
-- Color: ${accessories.color ?? "vibrant"}
-- Material: ${accessories.material ?? "mixed materials"}
-- Details: ${accessories.details ?? "bold shapes, sparkles, playful accents"}
-- Exaggerated, fashion-forward accessories scaled for chibi proportions
+- Style: ${accessories.style ?? "editorial"}
+- Color: ${accessories.color ?? "bold accents"}
 `
       : "";
-
-    const tattooDefaults = {
-      style: isMale
-        ? "bold blackwork, geometric, realism accents"
-        : "fine-line, delicate floral, minimalist symbols",
-      motif: isMale
-        ? "geometric shapes, lions, dragons, abstract lines, tribal-inspired"
-        : "butterflies, roses, stars, hearts, tiny symbols, elegant script",
-      placement: isMale
-        ? "forearm, upper arm, shoulder, chest (optional), back"
-        : "wrist, forearm, shoulder, collarbone, upper back",
-      coverage: isMale ? "medium (1–3 areas)" : "light (1–2 small areas)",
-      color: isMale ? "black with grey shading" : "black with subtle color accents",
-    };
 
     const tattooSection = tattoos?.enabled
       ? `
 Tattoos:
-- Style: ${tattoos.style ?? tattooDefaults.style}
-- Motif / theme: ${tattoos.motif ?? tattooDefaults.motif}
-- Placement: ${tattoos.placement ?? tattooDefaults.placement}
-- Coverage: ${tattoos.coverage ?? tattooDefaults.coverage}
-- Color: ${tattoos.color ?? tattooDefaults.color}
-- Detail level: ${tattoos.detail ?? "clean linework, sharp edges, readable at chibi scale"}
-- Rules:
-  - avoid face tattoos
-  - keep tattoos stylish and editorial (no clutter)
-  - scale perfectly to chibi proportions
+- Style: ${tattoos.style ?? (isMale ? "bold blackwork" : "fine-line")}
+- Placement: ${tattoos.placement ?? "arms or shoulders"}
+- Coverage: ${tattoos.coverage ?? "light to medium"}
+- Avoid face tattoos
 `
       : "";
 
-    const bodyBlock = isMale
+    const doggySection = doggyBagGlamour
       ? `
-Body & physique:
-- Athletic, muscular build with broad shoulders
-- Defined chest, arms, and legs
-- Strong, confident posture
-- Stylized chibi proportions with heroic physique
+Doggy Bag Glamour:
+- Carrier style: ${dogCarrierStyle}
+- Dog styling: ${dogStyleDetails}
 `
-      : `
-Body & physique:
-- Soft, curvy silhouette with elegant proportions
-- Balanced chibi anatomy and smooth contouring
-- Graceful posture and confident presence
-`;
+      : "";
 
-    // NEW: Bags / luggage
+    // 🎒 BAGS
     const bagsSection = bags?.enabled
       ? `
 Bags & luggage:
 - Type: ${bags.type ?? "traveller backpack"}
-- Style: ${bags.style ?? "modern, functional, fashion-forward"}
-- Material: ${bags.material ?? "nylon, canvas, or leather"}
-- Color: ${bags.color ?? "coordinated with outfit (neutral or bold accent)"}
-- Options to include (choose 1–2 max unless user requests more):
-  - suitcase (hard-shell, travel-ready)
-  - traveller backpack (carry-on friendly)
-  - school backpack (casual, youthful)
-  - tote or handbag (optional)
-- Scaled appropriately for chibi proportions
+- Options: suitcase, traveller backpack, school backpack, tote/handbag
+- Color: ${bags.color ?? "neutral or outfit-matched"}
+- Scaled for chibi proportions
 `
       : "";
 
-    // NEW: Sunglasses
+    // 🕶 SUNGLASSES
     const sunglassesSection = sunglasses?.enabled
       ? `
 Sunglasses:
 - Style: ${
           sunglasses.style ??
-          (isMale ? "aviator or square frames" : "oversized or cat-eye")
+          (isMale ? "aviator / square" : "oversized / cat-eye")
         }
 - Lens color: ${sunglasses.lensColor ?? "dark or gradient"}
-- Frame color: ${sunglasses.frameColor ?? "black, tortoise, or metallic"}
-- Vibe: ${sunglasses.vibe ?? "editorial, stylish, confident"}
-- Properly scaled for chibi face
+- Frame color: ${sunglasses.frameColor ?? "black or metallic"}
 `
       : "";
 
-    // NEW: Headphones (Beats-style)
+    // 🎧 HEADPHONES
     const headphonesSection = headphones?.enabled
       ? `
 Headphones:
-- Type: ${headphones.type ?? "over-ear Beats-style headphones"}
-- Color: ${headphones.color ?? "black, white, red, or metallic"}
-- Finish: ${headphones.finish ?? "matte with subtle gloss accents"}
-- Alternative option: wireless earbuds (compact, modern)
-- Clean, stylish, proportional to chibi head
+- Type: ${headphones.type ?? "over-ear Beats-style"}
+- Color: ${headphones.color ?? "black, white, or red"}
+- Alternative: wireless earbuds
 `
       : "";
 
     // ----------------------------
-    // 3) Master prompt (NO risky inline ternaries)
+    // 3) MASTER PROMPT
     // ----------------------------
     const prompt = `
-A high-quality ${artStyle} chibi character illustration (cute proportions, polished finish).
+A high-quality ${artStyle} chibi character illustration.
 
-Body proportions:
-- Balanced chibi proportions, elegant and stylized
-- Full-body or waist-up based on selection (${renderFormat})
-
-Character details:
+Character:
 - Age: ${ageGroup}
 - Gender presentation: ${genderPresentation}
 - Ethnicity: ${ethnicity}
 - Skin tone: ${skinTone}
-- Hair texture: ${hairType}
-- Hair style: ${hairStyle}
-- Hair color: ${hairColor}
+
+Hair:
+- Texture: ${hairType}
+- Style: ${hairStyle}
+- Color: ${hairColor}
 
 ${bodyBlock}
 
-Face & beauty details:
-- Makeup level: ${makeupLevel}
-- Lip style: ${lipStyle}
+Beauty:
+- Makeup: ${makeupLevel}
+- Lips: ${lipStyle}
 
-Fashion era & vibe:
-- Fashion era: ${fashionEra}
-- Overall vibe: ${vibe}
-
-Clothing & outfit selection:
+Fashion:
+- Era: ${fashionEra}
+- Vibe: ${vibe}
 - Outfit category: ${outfitCategory}
 - Clothing style: ${clothingStyle}
 
@@ -282,27 +230,23 @@ ${modestCulturalBlock}
 ${bollywoodBlock}
 ${culturalBlock}
 
-Swim & resort wear options (if relevant):
-- bikini set
-- two-piece bikini
-- high-waisted bikini
-- bikini with matching sarong
-- resort maxi dress
-- poolside cover-up
+Optional fashion add-ons:
+${shoesSection}${accessoriesSection}${nailsSection}${tattooSection}
 
-Optional add-ons (only include if enabled/selected):
-${doggySection}${nailsSection}${tattooSection}${shoesSection}${accessoriesSection}${bagsSection}${sunglassesSection}${headphonesSection}
+Lifestyle & props:
+${bagsSection}${sunglassesSection}${headphonesSection}${doggySection}
 
-User-selected controls summary:
+Scene:
 - Action/pose: ${actionPose}
 - Prop: ${prop}
 - Render format: ${renderFormat}
 - Transparent background: ${transparentBackground}
 
 Art direction:
-- Soft airbrushed shading, polished finish
-- Clean linework, premium lighting
-- No text, no watermark, no distortion
+- Clean linework
+- Soft airbrushed shading
+- High detail, cute chibi proportions
+- No text, no watermark
 `.trim();
 
     return NextResponse.json({ success: true, prompt });
