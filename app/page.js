@@ -1,3 +1,5 @@
+"use client";
+
 export default function Home() {
   return (
     <main style={{ padding: "40px", fontFamily: "Arial, sans-serif" }}>
@@ -8,6 +10,7 @@ export default function Home() {
       </p>
 
       <button
+        onClick={() => alert("Chibi generation coming soon!")}
         style={{
           marginTop: "20px",
           padding: "12px 20px",
