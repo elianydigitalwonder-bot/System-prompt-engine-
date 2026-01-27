@@ -7,57 +7,94 @@ export default function Home() {
   const [style, setStyle] = useState("chibi");
   const [message, setMessage] = useState("");
 
-  function handleGenerate() {
-    setMessage(`Got it! Style: ${style}. Prompt: ${prompt || "(empty)"}`);
+  async function handleGenerate() {
+    setMessage("Generating...");
+
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, style }),
+      });
+
+      const data = await res.json();
+      setMessage(JSON.stringify(data, null, 2));
+    } catch (err) {
+      setMessage("Error generating character");
+    }
   }
 
   return (
-    <main style={{ padding: "40px", fontFamily: "Arial, sans-serif", maxWidth: 700 }}>
+    <main
+      style={{
+        padding: 40,
+        fontFamily: "Arial, sans-serif",
+        maxWidth: 700,
+      }}
+    >
       <h1>✨ Chibi Generator</h1>
 
-      <p>Describe your character and pick a style. (We’ll connect the AI next.)</p>
+      <p>Describe your character and pick a style.</p>
 
       <label style={{ display: "block", marginTop: 16, fontWeight: "bold" }}>
         Character description
       </label>
+
       <input
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        placeholder='e.g. "A brave girl with pink hair and a hoodie"'
-        style={{ width: "100%", padding: 10, marginTop: 8, fontSize: 16 }}
+        placeholder="e.g. a brave girl with pink hair and a hoodie"
+        style={{
+          width: "100%",
+          padding: 10,
+          marginTop: 8,
+          fontSize: 16,
+        }}
       />
 
       <label style={{ display: "block", marginTop: 16, fontWeight: "bold" }}>
         Style
       </label>
+
       <select
         value={style}
         onChange={(e) => setStyle(e.target.value)}
-        style={{ width: "100%", padding: 10, marginTop: 8, fontSize: 16 }}
+        style={{
+          marginTop: 8,
+          padding: 8,
+          fontSize: 16,
+        }}
       >
         <option value="chibi">Chibi</option>
         <option value="anime">Anime</option>
-        <option value="watercolor">Watercolor</option>
-        <option value="pixel">Pixel</option>
+        <option value="cartoon">Cartoon</option>
       </select>
 
-      <button
-        onClick={handleGenerate}
-        style={{
-          marginTop: 20,
-          padding: "12px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Generate
-      </button>
+      <div style={{ marginTop: 20 }}>
+        <button
+          onClick={handleGenerate}
+          style={{
+            padding: "12px 20px",
+            fontSize: 16,
+            cursor: "pointer",
+          }}
+        >
+          Generate
+        </button>
+      </div>
 
-      {message ? (
-        <p style={{ marginTop: 16 }}>
-          <strong>{message}</strong>
-        </p>
-      ) : null}
+      {message && (
+        <pre
+          style={{
+            marginTop: 20,
+            padding: 16,
+            background: "#f4f4f4",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {message}
+        </pre>
+      )}
     </main>
   );
 }
