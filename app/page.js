@@ -4,89 +4,190 @@ import { useState } from "react";
 
 function ButtonGroup({ label, value, onChange, options }) {
   return (
-    <section style={ui.section}>
-      <div style={ui.sectionTitle}>{label}</div>
-      <div style={ui.chips}>
+    <div style={styles.group}>
+      <div style={styles.groupLabel}>{label}</div>
+      <div style={styles.chips}>
         {options.map((opt) => {
-          const active = value === opt.value;
+          const active = value === opt;
           return (
             <button
-              key={opt.value}
+              key={opt}
               type="button"
-              onClick={() => onChange(opt.value)}
-              style={active ? ui.chipActive : ui.chip}
+              onClick={() => onChange(opt)}
+              style={active ? styles.chipActive : styles.chip}
             >
-              {opt.label}
+              {opt}
             </button>
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }
 
-const ui = {
+export default function Home() {
+  const [description, setDescription] = useState("");
+  const [style, setStyle] = useState("Chibi");
+  const [hair, setHair] = useState("Pink");
+  const [vibe, setVibe] = useState("Cute");
+  const [outfit, setOutfit] = useState("Hoodie");
+  const [accessory, setAccessory] = useState("None");
+  const [religion, setReligion] = useState("None");
+
+  const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleGenerate() {
+    setLoading(true);
+
+    // TEMP placeholder image so UI works
+    setTimeout(() => {
+      setImageUrl(
+        "https://placehold.co/600x600/png?text=Chibi+Preview"
+      );
+      setLoading(false);
+    }, 800);
+  }
+
+  function handleReset() {
+    setDescription("");
+    setImageUrl("");
+  }
+
+  return (
+    <main style={styles.page}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>✨ Chibi Generator</h1>
+        <p style={styles.subtitle}>
+          Soft pastel · Apple-clean · Friendly
+        </p>
+
+        <input
+          placeholder="e.g. cute girl with glasses and pastel hoodie"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          style={styles.input}
+        />
+
+        <ButtonGroup
+          label="Style"
+          value={style}
+          onChange={setStyle}
+          options={["Chibi", "Anime", "Cartoon"]}
+        />
+
+        <ButtonGroup
+          label="Hair Color"
+          value={hair}
+          onChange={setHair}
+          options={["Pink", "Blonde", "Blue", "Brown"]}
+        />
+
+        <ButtonGroup
+          label="Vibe"
+          value={vibe}
+          onChange={setVibe}
+          options={["Cute", "Soft", "Cozy", "Dreamy"]}
+        />
+
+        <ButtonGroup
+          label="Outfit"
+          value={outfit}
+          onChange={setOutfit}
+          options={["Hoodie", "Dress", "Sweater"]}
+        />
+
+        <ButtonGroup
+          label="Accessories"
+          value={accessory}
+          onChange={setAccessory}
+          options={["None", "Glasses", "Hair clips"]}
+        />
+
+        <ButtonGroup
+          label="Religion / Spiritual context"
+          value={religion}
+          onChange={setReligion}
+          options={["None", "Christian", "Muslim", "Jewish", "Spiritual"]}
+        />
+
+        <div style={styles.actions}>
+          <button
+            onClick={handleGenerate}
+            disabled={loading}
+            style={styles.primary(loading)}
+          >
+            {loading ? "Generating…" : "Generate"}
+          </button>
+
+          <button onClick={handleReset} style={styles.secondary}>
+            Reset
+          </button>
+        </div>
+
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt="Preview"
+            style={styles.preview}
+          />
+        )}
+      </div>
+    </main>
+  );
+}
+
+const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(180deg, #fdf2f8, #eef2ff)",
+    background: "linear-gradient(180deg,#fdf2f8,#eef2ff)",
     padding: 24,
     fontFamily:
-      '-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif',
-    color: "#1f2937",
+      '-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui',
   },
-  shell: {
-    maxWidth: 920,
-    margin: "0 auto",
-    display: "grid",
-    gap: 20,
-  },
-  header: {
-    padding: 20,
-    borderRadius: 22,
-    background: "rgba(255,255,255,0.9)",
-    border: "1px solid rgba(0,0,0,0.06)",
-    boxShadow: "0 18px 40px rgba(0,0,0,0.08)",
-  },
-  title: { margin: 0, fontSize: 34, fontWeight: 800 },
-  subtitle: { marginTop: 6, color: "#6b7280" },
-
   card: {
-    borderRadius: 22,
+    maxWidth: 720,
+    margin: "0 auto",
     background: "rgba(255,255,255,0.9)",
-    border: "1px solid rgba(0,0,0,0.06)",
-    boxShadow: "0 18px 40px rgba(0,0,0,0.08)",
-    padding: 20,
+    borderRadius: 24,
+    padding: 24,
+    boxShadow: "0 30px 60px rgba(0,0,0,0.1)",
   },
-
-  label: { fontWeight: 700, marginBottom: 6, fontSize: 14 },
+  title: {
+    fontSize: 32,
+    fontWeight: 800,
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: "#6b7280",
+    marginBottom: 16,
+  },
   input: {
     width: "100%",
     padding: 14,
-    borderRadius: 16,
+    borderRadius: 14,
     border: "1px solid #e5e7eb",
+    marginBottom: 16,
     fontSize: 15,
-    outline: "none",
   },
-
-  section: {
-    marginTop: 14,
-    padding: 14,
-    borderRadius: 18,
-    background: "#fafafa",
-    border: "1px solid #f0f0f0",
+  group: {
+    marginBottom: 14,
   },
-  sectionTitle: {
-    fontWeight: 800,
-    fontSize: 13,
-    marginBottom: 10,
-    color: "#374151",
+  groupLabel: {
+    fontWeight: 700,
+    marginBottom: 8,
+    fontSize: 14,
   },
-  chips: { display: "flex", flexWrap: "wrap", gap: 10 },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 10,
+  },
   chip: {
     padding: "10px 14px",
     borderRadius: 999,
     border: "1px solid #e5e7eb",
-    background: "#ffffff",
+    background: "#fff",
     cursor: "pointer",
     fontWeight: 600,
   },
@@ -97,163 +198,31 @@ const ui = {
     background: "#fde7f3",
     color: "#9d174d",
     fontWeight: 700,
-    boxShadow: "0 6px 14px rgba(236,72,153,0.25)",
   },
-
-  actions: { display: "flex", gap: 12, marginTop: 20 },
-  primary: {
-    padding: "14px 22px",
-    borderRadius: 18,
+  actions: {
+    display: "flex",
+    gap: 12,
+    marginTop: 20,
+  },
+  primary: (disabled) => ({
+    padding: "14px 20px",
+    borderRadius: 16,
     border: "none",
-    background: "#f472b6",
+    background: disabled ? "#e5e7eb" : "#f472b6",
     color: "#fff",
-    fontSize: 16,
     fontWeight: 800,
-    cursor: "pointer",
-    boxShadow: "0 12px 26px rgba(236,72,153,0.35)",
-  },
+    cursor: disabled ? "not-allowed" : "pointer",
+  }),
   secondary: {
-    padding: "14px 22px",
-    borderRadius: 18,
+    padding: "14px 20px",
+    borderRadius: 16,
     border: "1px solid #e5e7eb",
     background: "#fff",
-    fontSize: 16,
     fontWeight: 700,
-    cursor: "pointer",
   },
-
-  previewImg: {
+  preview: {
+    marginTop: 24,
     width: "100%",
-    maxWidth: 520,
-    borderRadius: 20,
-    border: "1px solid rgba(0,0,0,0.08)",
-    marginTop: 16,
+    borderRadius: 18,
   },
 };
-
-export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [style, setStyle] = useState("chibi");
-  const [hair, setHair] = useState("pink");
-  const [vibe, setVibe] = useState("cute");
-  const [outfit, setOutfit] = useState("hoodie");
-  const [accessories, setAccessories] = useState("none");
-  const [religion, setReligion] = useState("none");
-  const [imageUrl, setImageUrl] = useState("");
-
-  function handleGenerate() {
-    setImageUrl(
-      "https://placehold.co/600x600/png?text=Chibi+Preview"
-    );
-  }
-
-  function handleReset() {
-    setPrompt("");
-    setImageUrl("");
-  }
-
-  return (
-    <div style={ui.page}>
-      <div style={ui.shell}>
-        <header style={ui.header}>
-          <h1 style={ui.title}>✨ Chibi Generator</h1>
-          <p style={ui.subtitle}>
-            Soft pastel · Apple-clean · Friendly
-          </p>
-        </header>
-
-        <div style={ui.card}>
-          <div style={ui.label}>Character description</div>
-          <input
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="e.g. cute girl with glasses and pastel hoodie"
-            style={ui.input}
-          />
-
-          <ButtonGroup
-            label="Style"
-            value={style}
-            onChange={setStyle}
-            options={[
-              { label: "Chibi", value: "chibi" },
-              { label: "Anime", value: "anime" },
-              { label: "Cartoon", value: "cartoon" },
-            ]}
-          />
-
-          <ButtonGroup
-            label="Hair Color"
-            value={hair}
-            onChange={setHair}
-            options={[
-              { label: "Pink", value: "pink" },
-              { label: "Blonde", value: "blonde" },
-              { label: "Blue", value: "blue" },
-              { label: "Brown", value: "brown" },
-            ]}
-          />
-
-          <ButtonGroup
-            label="Vibe"
-            value={vibe}
-            onChange={setVibe}
-            options={[
-              { label: "Cute", value: "cute" },
-              { label: "Soft", value: "soft" },
-              { label: "Cozy", value: "cozy" },
-              { label: "Dreamy", value: "dreamy" },
-            ]}
-          />
-
-          <ButtonGroup
-            label="Outfit"
-            value={outfit}
-            onChange={setOutfit}
-            options={[
-              { label: "Hoodie", value: "hoodie" },
-              { label: "Dress", value: "dress" },
-              { label: "Sweater", value: "sweater" },
-            ]}
-          />
-
-          <ButtonGroup
-            label="Accessories"
-            value={accessories}
-            onChange={setAccessories}
-            options={[
-              { label: "None", value: "none" },
-              { label: "Glasses", value: "glasses" },
-              { label: "Hair clips", value: "hair-clips" },
-            ]}
-          />
-
-          <ButtonGroup
-            label="Religion / Spiritual context"
-            value={religion}
-            onChange={setReligion}
-            options={[
-              { label: "None", value: "none" },
-              { label: "Christian", value: "christian" },
-              { label: "Muslim", value: "muslim" },
-              { label: "Jewish", value: "jewish" },
-              { label: "Spiritual", value: "spiritual" },
-            ]}
-          />
-
-          <div style={ui.actions}>
-            <button style={ui.primary} onClick={handleGenerate}>
-              Generate
-            </button>
-            <button style={ui.secondary} onClick={handleReset}>
-              Reset
-            </button>
-          </div>
-
-          {imageUrl && (
-            <img src={imageUrl
-                      )}
-        </div>
-      </div>
-    </div>
-           );
