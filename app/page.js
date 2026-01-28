@@ -1,249 +1,94 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
-  // Core
   const [prompt, setPrompt] = useState("");
   const [style, setStyle] = useState("chibi");
-
-  // Identity
-  const [ethnicity, setEthnicity] = useState("user-selected");
-  const [skinTone, setSkinTone] = useState("user-selected");
-  const [ageGroup, setAgeGroup] = useState("teen");
-  const [genderPresentation, setGenderPresentation] = useState("user-selected");
-
-  // Hair
-  const [hairType, setHairType] = useState("user-selected");
-  const [hairStyle, setHairStyle] = useState("user-selected");
-  const [hairColor, setHairColor] = useState("user-selected");
-
-  // Beauty
-  const [makeupLevel, setMakeupLevel] = useState("natural");
-  const [lipStyle, setLipStyle] = useState("user-selected");
-  const [nailsEnabled, setNailsEnabled] = useState(false);
-
-  // Fashion / vibe
-  const [fashionEra, setFashionEra] = useState("modern");
-  const [vibe, setVibe] = useState("stylish");
-  const [outfitCategory, setOutfitCategory] = useState("user-selected");
-
-  // Scene
-  const [background, setBackground] = useState("simple");
-  const [pose, setPose] = useState("standing");
-  const [mood, setMood] = useState("happy");
-  const [accessories, setAccessories] = useState("none");
-
-  // UI state
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [errorMsg, setErrorMsg] = useState("");
-
-  const payload = useMemo(() => {
-    return {
-      prompt,
-      style,
-      ethnicity,
-      skinTone,
-      ageGroup,
-      genderPresentation,
-      hairType,
-      hairStyle,
-      hairColor,
-      makeupLevel,
-      lipStyle,
-      nails: { enabled: nailsEnabled },
-      fashionEra,
-      vibe,
-      outfitCategory,
-      background,
-      pose,
-      mood,
-      accessories,
-    };
-  }, [
-    prompt,
-    style,
-    ethnicity,
-    skinTone,
-    ageGroup,
-    genderPresentation,
-    hairType,
-    hairStyle,
-    hairColor,
-    makeupLevel,
-    lipStyle,
-    nailsEnabled,
-    fashionEra,
-    vibe,
-    outfitCategory,
-    background,
-    pose,
-    mood,
-    accessories,
-  ]);
+  const [hair, setHair] = useState("pink");
+  const [vibe, setVibe] = useState("cute");
+  const [outfit, setOutfit] = useState("hoodie");
+  const [message, setMessage] = useState("");
 
   async function handleGenerate() {
-    setIsLoading(true);
-    setErrorMsg("");
-    setResult(null);
+    setMessage("Generating...");
 
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          prompt,
+          style,
+          hair,
+          vibe,
+          outfit,
+        }),
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        setErrorMsg(data?.error || "Request failed");
-      } else {
-        setResult(data);
-      }
+      setMessage(JSON.stringify(data, null, 2));
     } catch (err) {
-      setErrorMsg("Network error");
-    } finally {
-      setIsLoading(false);
+      setMessage("Error generating character");
     }
   }
 
-  const styles = {
-    page: {
-      minHeight: "100vh",
-      background: "#0b1020",
-      color: "#e8ecff",
-      padding: 24,
-      fontFamily:
-        'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji"',
-    },
-    shell: {
-      maxWidth: 980,
-      margin: "0 auto",
-      display: "grid",
-      gap: 16,
-    },
-    header: {
-      padding: 18,
-      borderRadius: 16,
-      background: "rgba(255,255,255,0.06)",
-      border: "1px solid rgba(255,255,255,0.10)",
-    },
-    title: { fontSize: 34, margin: 0, letterSpacing: 0.2 },
-    sub: { marginTop: 8, opacity: 0.85, lineHeight: 1.4 },
-    grid: {
-      display: "grid",
-      gap: 16,
-      gridTemplateColumns: "1fr 1fr",
-    },
-    card: {
-      borderRadius: 16,
-      background: "rgba(255,255,255,0.06)",
-      border: "1px solid rgba(255,255,255,0.10)",
-      padding: 16,
-    },
-    cardTitle: {
-      margin: 0,
-      marginBottom: 12,
-      fontSize: 16,
-      letterSpacing: 0.2,
-      opacity: 0.95,
-    },
-    label: { display: "block", fontSize: 13, opacity: 0.85, marginBottom: 6 },
-    input: {
-      width: "100%",
-      padding: "10px 12px",
-      borderRadius: 12,
-      border: "1px solid rgba(255,255,255,0.18)",
-      background: "rgba(0,0,0,0.25)",
-      color: "#e8ecff",
-      outline: "none",
-      fontSize: 14,
-    },
-    textarea: {
-      width: "100%",
-      padding: "10px 12px",
-      borderRadius: 12,
-      border: "1px solid rgba(255,255,255,0.18)",
-      background: "rgba(0,0,0,0.25)",
-      color: "#e8ecff",
-      outline: "none",
-      fontSize: 14,
-      minHeight: 90,
-      resize: "vertical",
-    },
-    row2: { display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr" },
-    row3: { display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr 1fr" },
-    toggleRow: {
-      display: "flex",
-      alignItems: "center",
-      gap: 10,
-      marginTop: 10,
-      padding: 12,
-      borderRadius: 12,
-      border: "1px solid rgba(255,255,255,0.10)",
-      background: "rgba(0,0,0,0.18)",
-    },
-    btnRow: { display: "flex", gap: 12, alignItems: "center", marginTop: 12 },
-    button: {
-      padding: "12px 14px",
-      borderRadius: 14,
-      border: "1px solid rgba(255,255,255,0.18)",
-      background: "linear-gradient(180deg, rgba(124,92,255,0.95), rgba(88,68,255,0.85))",
-      color: "white",
-      fontWeight: 700,
-      cursor: "pointer",
-      minWidth: 140,
-    },
-    secondary: {
-      padding: "12px 14px",
-      borderRadius: 14,
-      border: "1px solid rgba(255,255,255,0.18)",
-      background: "rgba(255,255,255,0.06)",
-      color: "#e8ecff",
-      cursor: "pointer",
-      minWidth: 140,
-    },
-    help: { fontSize: 12, opacity: 0.75, margin: "8px 0 0" },
-    full: { gridColumn: "1 / -1" },
-    resultBox: {
-      marginTop: 12,
-      padding: 14,
-      borderRadius: 14,
-      background: "rgba(0,0,0,0.30)",
-      border: "1px solid rgba(255,255,255,0.12)",
-      overflowX: "auto",
-      fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-      fontSize: 12,
-      lineHeight: 1.45,
-      whiteSpace: "pre",
-    },
-    error: {
-      marginTop: 12,
-      padding: 12,
-      borderRadius: 14,
-      background: "rgba(255,0,0,0.12)",
-      border: "1px solid rgba(255,0,0,0.28)",
-      color: "#ffd7d7",
-      fontSize: 13,
-    },
-    footer: {
-      opacity: 0.7,
-      fontSize: 12,
-      textAlign: "center",
-      padding: 10,
-    },
-  };
+  return (
+    <main style={{ padding: 40, fontFamily: "Arial, sans-serif", maxWidth: 700 }}>
+      <h1>✨ Chibi Generator</h1>
+      <p>Describe your character and customize the look.</p>
 
-  function resetToDefaults() {
-    setPrompt("");
-    setStyle("chibi");
+      <label>Character description</label>
+      <input
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder="e.g. brave girl with a hoodie"
+        style={{ width: "100%", padding: 10, marginBottom: 16 }}
+      />
 
-    setEthnicity("user-selected");
-    setSkinTone("user-selected");
-    setAgeGroup("teen");
-    setGenderPresentation("user-selected");
+      <label>Style</label>
+      <select value={style} onChange={(e) => setStyle(e.target.value)}>
+        <option value="chibi">Chibi</option>
+        <option value="anime">Anime</option>
+        <option value="cartoon">Cartoon</option>
+      </select>
 
-    setHairType("user-selected");
-   
+      <label>Hair Color</label>
+      <select value={hair} onChange={(e) => setHair(e.target.value)}>
+        <option value="pink">Pink</option>
+        <option value="black">Black</option>
+        <option value="blonde">Blonde</option>
+        <option value="blue">Blue</option>
+      </select>
+
+      <label>Vibe</label>
+      <select value={vibe} onChange={(e) => setVibe(e.target.value)}>
+        <option value="cute">Cute</option>
+        <option value="cool">Cool</option>
+        <option value="soft">Soft</option>
+        <option value="edgy">Edgy</option>
+      </select>
+
+      <label>Outfit</label>
+      <select value={outfit} onChange={(e) => setOutfit(e.target.value)}>
+        <option value="hoodie">Hoodie</option>
+        <option value="dress">Dress</option>
+        <option value="jacket">Jacket</option>
+        <option value="school uniform">School Uniform</option>
+      </select>
+
+      <br /><br />
+
+      <button
+        onClick={handleGenerate}
+        style={{ padding: "12px 20px", cursor: "pointer" }}
+      >
+        Generate
+      </button>
+
+      <pre style={{ marginTop: 20, background: "#f4f4f4", padding: 12 }}>
+        {message}
+      </pre>
+    </main>
+  );
+}
