@@ -5,20 +5,16 @@ import { useState } from "react";
 function ButtonGroup({ label, value, onChange, options }) {
   return (
     <section style={ui.section}>
-      <div style={ui.sectionHeader}>
-        <div style={ui.sectionTitle}>{label}</div>
-      </div>
-
-      <div style={ui.chipGrid}>
+      <div style={ui.sectionTitle}>{label}</div>
+      <div style={ui.chips}>
         {options.map((opt) => {
-          const selected = value === opt.value;
+          const active = value === opt.value;
           return (
             <button
               key={opt.value}
               type="button"
               onClick={() => onChange(opt.value)}
-              style={selected ? ui.chipSelected : ui.chip}
-              aria-pressed={selected}
+              style={active ? ui.chipActive : ui.chip}
             >
               {opt.label}
             </button>
@@ -32,166 +28,127 @@ function ButtonGroup({ label, value, onChange, options }) {
 const ui = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(180deg, #0b1020 0%, #0f172a 100%)",
-    padding: 18,
+    background: "linear-gradient(180deg, #fdf2f8, #eef2ff)",
+    padding: 20,
     fontFamily:
-      'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji"',
-    color: "#e5e7eb",
+      '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif',
+    color: "#1f2937",
   },
   shell: {
-    maxWidth: 920,
+    maxWidth: 900,
     margin: "0 auto",
     display: "grid",
-    gap: 14,
+    gap: 16,
   },
-  headerCard: {
-    borderRadius: 18,
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.10)",
-    boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
+  header: {
     padding: 18,
+    borderRadius: 20,
+    background: "rgba(255,255,255,0.85)",
+    border: "1px solid rgba(0,0,0,0.06)",
+    boxShadow: "0 12px 30px rgba(0,0,0,0.08)",
   },
   title: {
     margin: 0,
-    fontSize: 32,
-    letterSpacing: -0.5,
+    fontSize: 34,
+    fontWeight: 800,
+    letterSpacing: -0.6,
   },
   subtitle: {
-    margin: "8px 0 0",
-    color: "rgba(229,231,235,0.80)",
-    lineHeight: 1.4,
+    marginTop: 8,
+    color: "#6b7280",
   },
   card: {
-    borderRadius: 18,
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.10)",
-    boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
-    overflow: "hidden",
+    borderRadius: 22,
+    background: "rgba(255,255,255,0.9)",
+    border: "1px solid rgba(0,0,0,0.06)",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
   },
   cardInner: {
-    padding: 18,
+    padding: 20,
   },
-  fieldLabelRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-    gap: 10,
-    marginBottom: 8,
-  },
-  fieldLabel: {
-    fontWeight: 800,
-    fontSize: 13,
-    color: "rgba(229,231,235,0.95)",
-  },
-  fieldHint: {
-    fontSize: 12,
-    color: "rgba(229,231,235,0.65)",
+  label: {
+    fontWeight: 700,
+    marginBottom: 6,
+    fontSize: 14,
   },
   input: {
     width: "100%",
-    padding: "12px 12px",
+    padding: 12,
     borderRadius: 14,
-    border: "1px solid rgba(255,255,255,0.16)",
-    background: "rgba(0,0,0,0.25)",
-    color: "#e5e7eb",
-    outline: "none",
+    border: "1px solid #e5e7eb",
     fontSize: 15,
-  },
-  divider: {
-    height: 1,
-    background: "rgba(255,255,255,0.08)",
-    margin: "16px 0",
+    outline: "none",
   },
   section: {
+    marginTop: 14,
     padding: 14,
-    borderRadius: 16,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(0,0,0,0.18)",
-  },
-  sectionHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-    marginBottom: 10,
+    borderRadius: 18,
+    background: "#fafafa",
+    border: "1px solid #f0f0f0",
   },
   sectionTitle: {
     fontWeight: 800,
     fontSize: 13,
-    color: "rgba(229,231,235,0.92)",
-    letterSpacing: 0.2,
+    marginBottom: 10,
+    color: "#374151",
   },
-  chipGrid: {
+  chips: {
     display: "flex",
     flexWrap: "wrap",
     gap: 10,
   },
   chip: {
-    padding: "10px 12px",
+    padding: "10px 14px",
     borderRadius: 999,
-    border: "1px solid rgba(255,255,255,0.14)",
-    background: "rgba(255,255,255,0.05)",
-    color: "rgba(229,231,235,0.92)",
+    border: "1px solid #e5e7eb",
+    background: "#ffffff",
+    color: "#374151",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+  chipActive: {
+    padding: "10px 14px",
+    borderRadius: 999,
+    border: "1px solid #f9a8d4",
+    background: "#fde7f3",
+    color: "#9d174d",
     cursor: "pointer",
     fontWeight: 700,
-    fontSize: 13,
+    boxShadow: "0 6px 14px rgba(236,72,153,0.25)",
   },
-  chipSelected: {
-    padding: "10px 12px",
-    borderRadius: 999,
-    border: "1px solid rgba(255,255,255,0.22)",
-    background: "rgba(255,255,255,0.92)",
-    color: "#0b1020",
-    cursor: "pointer",
-    fontWeight: 800,
-    fontSize: 13,
-    boxShadow: "0 10px 22px rgba(255,255,255,0.12)",
-  },
-  actionsRow: {
+  actions: {
     display: "flex",
-    flexWrap: "wrap",
-    gap: 10,
-    alignItems: "center",
-    marginTop: 14,
+    gap: 12,
+    marginTop: 18,
   },
-  primaryBtn: (disabled) => ({
-    padding: "12px 16px",
-    borderRadius: 14,
-    border: "1px solid rgba(255,255,255,0.18)",
-    background: disabled
-      ? "rgba(148,163,184,0.35)"
-      : "linear-gradient(180deg, rgba(124,92,255,0.95), rgba(88,68,255,0.85))",
+  primary: (disabled) => ({
+    padding: "14px 20px",
+    borderRadius: 16,
+    border: "none",
+    background: disabled ? "#e5e7eb" : "#f472b6",
     color: "#fff",
-    cursor: disabled ? "not-allowed" : "pointer",
-    fontWeight: 900,
-    letterSpacing: 0.2,
-  }),
-  ghostBtn: (disabled) => ({
-    padding: "12px 16px",
-    borderRadius: 14,
-    border: "1px solid rgba(255,255,255,0.14)",
-    background: "rgba(255,255,255,0.06)",
-    color: "rgba(229,231,235,0.92)",
-    cursor: disabled ? "not-allowed" : "pointer",
+    fontSize: 16,
     fontWeight: 800,
+    cursor: disabled ? "not-allowed" : "pointer",
+    boxShadow: "0 10px 24px rgba(236,72,153,0.35)",
   }),
-  results: {
-    marginTop: 14,
+  secondary: {
+    padding: "14px 20px",
+    borderRadius: 16,
+    border: "1px solid #e5e7eb",
+    background: "#fff",
+    fontSize: 16,
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  result: {
+    marginTop: 16,
     padding: 14,
     borderRadius: 16,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(0,0,0,0.35)",
-    color: "#e5e7eb",
+    background: "#fdf2f8",
+    border: "1px solid #fbcfe8",
+    fontSize: 13,
     whiteSpace: "pre-wrap",
-    overflowX: "auto",
-    fontFamily:
-      "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: 12.5,
-    lineHeight: 1.5,
-  },
-  footerHint: {
-    marginTop: 10,
-    fontSize: 12,
-    color: "rgba(229,231,235,0.60)",
   },
 };
 
@@ -204,29 +161,23 @@ export default function Home() {
   const [accessories, setAccessories] = useState("none");
   const [religion, setReligion] = useState("none");
 
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   async function handleGenerate() {
     const masterPrompt = `
 Create a ${style} chibi-style character.
 
-Character description:
-${prompt || "No description provided"}
+Description:
+${prompt}
 
-Appearance:
-- Hair color: ${hairColor}
-- Outfit: ${outfit}
-- Accessories: ${accessories}
+Hair: ${hairColor}
+Outfit: ${outfit}
+Accessories: ${accessories}
+Vibe: ${vibe}
+Religion / spirituality: ${religion}
 
-Personality & mood:
-- Vibe: ${vibe}
-
-Cultural / spiritual context:
-- Religion or spirituality: ${religion}
-
-Art direction:
-Cute proportions, big expressive eyes, clean line art, soft shading, high-quality illustration.
+Art style: pastel colors, soft shading, clean lines, cute proportions.
     `.trim();
 
     setLoading(true);
@@ -241,52 +192,32 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
 
       const data = await res.json();
       setMessage(JSON.stringify(data, null, 2));
-    } catch (err) {
+    } catch {
       setMessage("Error generating character");
     } finally {
       setLoading(false);
     }
   }
 
-  function handleReset() {
-    setPrompt("");
-    setStyle("chibi");
-    setHairColor("pink");
-    setVibe("cute");
-    setOutfit("hoodie");
-    setAccessories("none");
-    setReligion("none");
-    setMessage("");
-  }
-
-  const canGenerate = prompt.trim().length > 0 && !loading;
-
   return (
     <div style={ui.page}>
       <div style={ui.shell}>
-        <header style={ui.headerCard}>
+        <header style={ui.header}>
           <h1 style={ui.title}>✨ Chibi Generator</h1>
           <p style={ui.subtitle}>
-            Pick options like a real product form. Next we can replace the JSON
-            with an image preview.
+            Soft pastel • Apple-clean • Friendly
           </p>
         </header>
 
         <div style={ui.card}>
           <div style={ui.cardInner}>
-            <div style={ui.fieldLabelRow}>
-              <div style={ui.fieldLabel}>Character description</div>
-              <div style={ui.fieldHint}>Try: “pink hair hoodie glasses”</div>
-            </div>
-
+            <div style={ui.label}>Character description</div>
             <input
+              style={ui.input}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="e.g. brave girl with glasses and a hoodie"
-              style={ui.input}
+              placeholder="e.g. cute girl with glasses and pastel hoodie"
             />
-
-            <div style={ui.divider} />
 
             <ButtonGroup
               label="Style"
@@ -305,9 +236,9 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
               onChange={setHairColor}
               options={[
                 { value: "pink", label: "Pink" },
-                { value: "black", label: "Black" },
                 { value: "blonde", label: "Blonde" },
                 { value: "blue", label: "Blue" },
+                { value: "brown", label: "Brown" },
               ]}
             />
 
@@ -317,9 +248,9 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
               onChange={setVibe}
               options={[
                 { value: "cute", label: "Cute" },
-                { value: "cool", label: "Cool" },
                 { value: "soft", label: "Soft" },
-                { value: "edgy", label: "Edgy" },
+                { value: "cozy", label: "Cozy" },
+                { value: "dreamy", label: "Dreamy" },
               ]}
             />
 
@@ -330,8 +261,7 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
               options={[
                 { value: "hoodie", label: "Hoodie" },
                 { value: "dress", label: "Dress" },
-                { value: "jacket", label: "Jacket" },
-                { value: "school uniform", label: "School Uniform" },
+                { value: "sweater", label: "Sweater" },
               ]}
             />
 
@@ -342,8 +272,7 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
               options={[
                 { value: "none", label: "None" },
                 { value: "glasses", label: "Glasses" },
-                { value: "hat", label: "Hat" },
-                { value: "earrings", label: "Earrings" },
+                { value: "hair clips", label: "Hair clips" },
               ]}
             />
 
@@ -356,38 +285,31 @@ Cute proportions, big expressive eyes, clean line art, soft shading, high-qualit
                 { value: "christian", label: "Christian" },
                 { value: "muslim", label: "Muslim" },
                 { value: "jewish", label: "Jewish" },
-                { value: "hindu", label: "Hindu" },
-                { value: "buddhist", label: "Buddhist" },
                 { value: "spiritual", label: "Spiritual" },
               ]}
             />
 
-            <div style={ui.actionsRow}>
+            <div style={ui.actions}>
               <button
-                type="button"
                 onClick={handleGenerate}
-                disabled={!canGenerate}
-                style={ui.primaryBtn(!canGenerate)}
+                disabled={!prompt || loading}
+                style={ui.primary(!prompt || loading)}
               >
-                {loading ? "Generating..." : "Generate"}
+                {loading ? "Generating…" : "Generate"}
               </button>
 
               <button
-                type="button"
-                onClick={handleReset}
-                disabled={loading}
-                style={ui.ghostBtn(loading)}
+                onClick={() => {
+                  setPrompt("");
+                  setMessage("");
+                }}
+                style={ui.secondary}
               >
                 Reset
               </button>
             </div>
 
-            {message ? <pre style={ui.results}>{message}</pre> : null}
-
-            <div style={ui.footerHint}>
-              Want it even nicer? Next we can add icons + two-column sections +
-              an image preview panel.
-            </div>
+            {message && <pre style={ui.result}>{message}</pre>}
           </div>
         </div>
       </div>
