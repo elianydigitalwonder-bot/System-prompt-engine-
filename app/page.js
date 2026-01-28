@@ -8,25 +8,23 @@ function ButtonGroup({ label, value, onChange, options }) {
       <div style={{ fontWeight: 700, marginBottom: 8 }}>{label}</div>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         {options.map((opt) => {
-          const active = value === opt.value;
+          const active = value === opt;
           return (
             <button
-              key={opt.value}
+              key={opt}
               type="button"
-              onClick={() => onChange(opt.value)}
+              onClick={() => onChange(opt)}
               style={{
                 padding: "10px 16px",
                 borderRadius: 999,
-                border: active
-                  ? "1px solid #f9a8d4"
-                  : "1px solid #e5e7eb",
+                border: active ? "1px solid #f9a8d4" : "1px solid #e5e7eb",
                 background: active ? "#fde7f3" : "#fff",
                 color: active ? "#9d174d" : "#374151",
                 fontWeight: 700,
                 cursor: "pointer",
               }}
             >
-              {opt.label}
+              {opt}
             </button>
           );
         })}
@@ -37,55 +35,85 @@ function ButtonGroup({ label, value, onChange, options }) {
 
 export default function Home() {
   const [prompt, setPrompt] = useState("");
-  const [style, setStyle] = useState("chibi");
-  const [hair, setHair] = useState("pink");
-  const [vibe, setVibe] = useState("cute");
-  const [outfit, setOutfit] = useState("hoodie");
-  const [accessories, setAccessories] = useState("none");
-  const [religion, setReligion] = useState("none");
+  const [style, setStyle] = useState("Chibi");
+  const [hair, setHair] = useState("Pink");
+  const [vibe, setVibe] = useState("Cute");
+  const [outfit, setOutfit] = useState("Hoodie");
+  const [accessories, setAccessories] = useState("None");
+  const [religion, setReligion] = useState("None");
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [error, setError] = useState("");
 
   async function handleGenerate() {
     setLoading(true);
+    setError("");
     setImageUrl("");
 
-    // Placeholder image for now
-    setTimeout(() => {
-      setImageUrl(
-        "https://placehold.co/600x600/png?text=Chibi+Preview"
-      );
+    const masterPrompt = `
+${style} chibi character.
+${prompt}
+Hair: ${hair}
+Outfit: ${outfit}
+Vibe: ${vibe}
+Accessories: ${accessories}
+Religion / spiritual context: ${religion}
+Pastel colors, soft shading, cute proportions.
+    `.trim();
+
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: masterPrompt }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Generation failed");
+      }
+
+      setImageUrl(data.imageUrl);
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   }
 
   return (
     <main
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(180deg,#fdf2f8,#eef2ff)",
+        background: "linear-gradient(180deg, #fdf2f8, #eef2ff)",
         padding: 24,
         fontFamily:
-          '-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui',
+          '-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui',
       }}
     >
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <h1 style={{ fontSize: 34, fontWeight: 800 }}>✨ Chibi Generator</h1>
+      <div
+        style={{
+          maxWidth: 900,
+          margin: "0 auto",
+          background: "rgba(255,255,255,0.9)",
+          borderRadius: 24,
+          padding: 24,
+          boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h1 style={{ fontSize: 32, fontWeight: 800 }}>
+          ✨ Chibi Generator
+        </h1>
         <p style={{ color: "#6b7280" }}>
           Soft pastel • Apple-clean • Friendly
         </p>
 
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: 24,
-            padding: 24,
-            marginTop: 24,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-          }}
-        >
-          <label style={{ fontWeight: 700 }}>Character description</label>
+        <div style={{ marginTop: 20 }}>
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>
+            Character description
+          </div>
           <input
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -93,125 +121,103 @@ export default function Home() {
             style={{
               width: "100%",
               padding: 14,
-              marginTop: 8,
-              marginBottom: 24,
               borderRadius: 14,
               border: "1px solid #e5e7eb",
+              fontSize: 16,
             }}
           />
+        </div>
 
-          <ButtonGroup
-            label="Style"
-            value={style}
-            onChange={setStyle}
-            options={[
-              { label: "Chibi", value: "chibi" },
-              { label: "Anime", value: "anime" },
-              { label: "Cartoon", value: "cartoon" },
-            ]}
-          />
+        <ButtonGroup
+          label="Style"
+          value={style}
+          onChange={setStyle}
+          options={["Chibi", "Anime", "Cartoon"]}
+        />
 
-          <ButtonGroup
-            label="Hair Color"
-            value={hair}
-            onChange={setHair}
-            options={[
-              { label: "Pink", value: "pink" },
-              { label: "Blonde", value: "blonde" },
-              { label: "Blue", value: "blue" },
-              { label: "Brown", value: "brown" },
-            ]}
-          />
+        <ButtonGroup
+          label="Hair Color"
+          value={hair}
+          onChange={setHair}
+          options={["Pink", "Blonde", "Blue", "Brown"]}
+        />
 
-          <ButtonGroup
-            label="Vibe"
-            value={vibe}
-            onChange={setVibe}
-            options={[
-              { label: "Cute", value: "cute" },
-              { label: "Soft", value: "soft" },
-              { label: "Cozy", value: "cozy" },
-              { label: "Dreamy", value: "dreamy" },
-            ]}
-          />
+        <ButtonGroup
+          label="Vibe"
+          value={vibe}
+          onChange={setVibe}
+          options={["Cute", "Soft", "Cozy", "Dreamy"]}
+        />
 
-          <ButtonGroup
-            label="Outfit"
-            value={outfit}
-            onChange={setOutfit}
-            options={[
-              { label: "Hoodie", value: "hoodie" },
-              { label: "Dress", value: "dress" },
-              { label: "Sweater", value: "sweater" },
-            ]}
-          />
+        <ButtonGroup
+          label="Outfit"
+          value={outfit}
+          onChange={setOutfit}
+          options={["Hoodie", "Dress", "Sweater"]}
+        />
 
-          <ButtonGroup
-            label="Accessories"
-            value={accessories}
-            onChange={setAccessories}
-            options={[
-              { label: "None", value: "none" },
-              { label: "Glasses", value: "glasses" },
-              { label: "Hair clips", value: "clips" },
-            ]}
-          />
+        <ButtonGroup
+          label="Accessories"
+          value={accessories}
+          onChange={setAccessories}
+          options={["None", "Glasses", "Hair clips"]}
+        />
 
-          <ButtonGroup
-            label="Religion / Spiritual context"
-            value={religion}
-            onChange={setReligion}
-            options={[
-              { label: "None", value: "none" },
-              { label: "Christian", value: "christian" },
-              { label: "Muslim", value: "muslim" },
-              { label: "Jewish", value: "jewish" },
-              { label: "Spiritual", value: "spiritual" },
-            ]}
-          />
+        <ButtonGroup
+          label="Religion / Spiritual context"
+          value={religion}
+          onChange={setReligion}
+          options={["None", "Christian", "Muslim", "Jewish", "Spiritual"]}
+        />
 
+        <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
           <button
             onClick={handleGenerate}
-            disabled={loading || !prompt}
+            disabled={loading}
             style={{
-              marginTop: 20,
-              padding: "14px 22px",
+              padding: "14px 24px",
               borderRadius: 16,
               border: "none",
-              background: loading || !prompt ? "#e5e7eb" : "#f472b6",
+              background: loading ? "#e5e7eb" : "#f472b6",
               color: "#fff",
               fontWeight: 800,
-              cursor:
-                loading || !prompt ? "not-allowed" : "pointer",
+              fontSize: 16,
+              cursor: loading ? "not-allowed" : "pointer",
             }}
           >
             {loading ? "Generating…" : "Generate"}
           </button>
         </div>
 
-        <div
-          style={{
-            marginTop: 30,
-            background: "#fff",
-            borderRadius: 24,
-            padding: 20,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-            textAlign: "center",
-          }}
-        >
+        {error && (
+          <p style={{ color: "red", marginTop: 16 }}>{error}</p>
+        )}
+
+        <div style={{ marginTop: 30 }}>
+          <h3>Chibi Preview</h3>
           {imageUrl ? (
             <img
               src={imageUrl}
               alt="Chibi preview"
               style={{
-                width: "100%",
-                maxWidth: 500,
+                maxWidth: "100%",
                 borderRadius: 20,
+                border: "1px solid #e5e7eb",
               }}
             />
           ) : (
-            <div style={{ color: "#9ca3af", fontWeight: 700 }}>
-              Chibi Preview
+            <div
+              style={{
+                height: 300,
+                borderRadius: 20,
+                border: "1px dashed #d1d5db",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#9ca3af",
+              }}
+            >
+              No image yet
             </div>
           )}
         </div>
