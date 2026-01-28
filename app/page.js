@@ -33,8 +33,17 @@ export default function Home() {
     }
   }
 
+  const buttonStyle = (active) => ({
+    padding: "8px 14px",
+    borderRadius: 8,
+    border: active ? "2px solid black" : "1px solid #ccc",
+    background: active ? "#222" : "#fff",
+    color: active ? "#fff" : "#000",
+    cursor: "pointer",
+  });
+
   return (
-    <main style={{ padding: 40, fontFamily: "Arial, sans-serif", maxWidth: 700 }}>
+    <main style={{ padding: 40, fontFamily: "Arial, sans-serif", maxWidth: 600 }}>
       <h1>✨ Chibi Generator</h1>
       <p>Describe your character and customize the look.</p>
 
@@ -43,45 +52,48 @@ export default function Home() {
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="e.g. brave girl with a hoodie"
-        style={{ width: "100%", padding: 10, marginBottom: 16 }}
+        style={{ width: "100%", padding: 10, marginBottom: 20 }}
       />
 
       <label>Style</label>
-      <select value={style} onChange={(e) => setStyle(e.target.value)}>
-        <option value="chibi">Chibi</option>
-        <option value="anime">Anime</option>
-        <option value="cartoon">Cartoon</option>
-      </select>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        {["chibi", "anime", "cartoon"].map((s) => (
+          <button key={s} onClick={() => setStyle(s)} style={buttonStyle(style === s)}>
+            {s}
+          </button>
+        ))}
+      </div>
 
       <label>Hair Color</label>
-      <select value={hair} onChange={(e) => setHair(e.target.value)}>
-        <option value="pink">Pink</option>
-        <option value="black">Black</option>
-        <option value="blonde">Blonde</option>
-        <option value="blue">Blue</option>
-      </select>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        {["pink", "black", "blonde", "blue"].map((h) => (
+          <button key={h} onClick={() => setHair(h)} style={buttonStyle(hair === h)}>
+            {h}
+          </button>
+        ))}
+      </div>
 
       <label>Vibe</label>
-      <select value={vibe} onChange={(e) => setVibe(e.target.value)}>
-        <option value="cute">Cute</option>
-        <option value="cool">Cool</option>
-        <option value="soft">Soft</option>
-        <option value="edgy">Edgy</option>
-      </select>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        {["cute", "cool", "soft", "edgy"].map((v) => (
+          <button key={v} onClick={() => setVibe(v)} style={buttonStyle(vibe === v)}>
+            {v}
+          </button>
+        ))}
+      </div>
 
       <label>Outfit</label>
-      <select value={outfit} onChange={(e) => setOutfit(e.target.value)}>
-        <option value="hoodie">Hoodie</option>
-        <option value="dress">Dress</option>
-        <option value="jacket">Jacket</option>
-        <option value="school uniform">School Uniform</option>
-      </select>
-
-      <br /><br />
+      <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+        {["hoodie", "dress", "jacket", "school uniform"].map((o) => (
+          <button key={o} onClick={() => setOutfit(o)} style={buttonStyle(outfit === o)}>
+            {o}
+          </button>
+        ))}
+      </div>
 
       <button
         onClick={handleGenerate}
-        style={{ padding: "12px 20px", cursor: "pointer" }}
+        style={{ padding: "12px 20px", cursor: "pointer", fontSize: 16 }}
       >
         Generate
       </button>
