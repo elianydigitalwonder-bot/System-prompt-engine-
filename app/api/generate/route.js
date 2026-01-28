@@ -2,12 +2,17 @@ import OpenAI from "openai";
 
 export const runtime = "nodejs";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req) {
   try {
+    if (!process.env.OPENAI_API_KEY) {
+      return Response.json(
+        { ok: false, error: "OPENAI_API_KEY is missing in Vercel env vars" },
+        { status: 500 }
+      );
+    }
+
     const body = await req.json();
     const prompt = body?.prompt?.trim();
 
@@ -18,7 +23,6 @@ export async function POST(req) {
       );
     }
 
-    // Generate image (base64)
     const result = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
@@ -29,18 +33,23 @@ export async function POST(req) {
 
     if (!b64) {
       return Response.json(
-        { ok: false, error: "No image returned from OpenAI" },
+        { ok: false, error: "OpenAI returned no b64 image" },
         { status: 500 }
       );
     }
 
-    // Return a data URL so the browser can show it instantly
-    const imageUrl = `data:image/png;base64,${b64}`;
-
-    return Response.json({ ok: true, imageUrl });
+    return Response.json({
+      ok: true,
+      imageUrl: `data:image/png;base64,${b64}`,
+    });
   } catch (err) {
     return Response.json(
-      { ok: false, error: err?.message || "Server error" },
+      {
+        ok: false,
+        error: err?.message || "Server error",
+        // include a tiny hint that helps debugging
+        hint: "Check Vercel env var OPENAI_API_KEY + redeploy",
+      },
       { status: 500 }
     );
   }
