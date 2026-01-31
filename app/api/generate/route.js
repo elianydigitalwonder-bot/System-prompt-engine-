@@ -2,27 +2,38 @@ import OpenAI from "openai";
 
 export const runtime = "nodejs";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req) {
   try {
+    // 1. Check API key
     if (!process.env.OPENAI_API_KEY) {
-      return Response.json(
-        { ok: false, error: "OPENAI_API_KEY is missing in Vercel env vars" },
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "OPENAI_API_KEY missing in environment variables",
+        }),
         { status: 500 }
       );
     }
 
+    // 2. Read prompt
     const body = await req.json();
     const prompt = body?.prompt?.trim();
 
     if (!prompt) {
-      return Response.json(
-        { ok: false, error: "Missing prompt" },
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "Prompt is missing",
+        }),
         { status: 400 }
       );
     }
 
+    // 3. Generate image
     const result = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
@@ -32,24 +43,30 @@ export async function POST(req) {
     const b64 = result?.data?.[0]?.b64_json;
 
     if (!b64) {
-      return Response.json(
-        { ok: false, error: "OpenAI returned no b64 image" },
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "No image returned from OpenAI",
+        }),
         { status: 500 }
       );
     }
 
-    return Response.json({
-      ok: true,
-      imageUrl: `data:image/png;base64,${b64}`,
-    });
+    // 4. Return image
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        imageUrl: `data:image/png;base64,${b64}`,
+      }),
+      { status: 200 }
+    );
   } catch (err) {
-    return Response.json(
-      {
+    return new Response(
+      JSON.stringify({
         ok: false,
         error: err?.message || "Server error",
-        // include a tiny hint that helps debugging
-        hint: "Check Vercel env var OPENAI_API_KEY + redeploy",
-      },
+        hint: "Check OPENAI_API_KEY and redeploy",
+      }),
       { status: 500 }
     );
   }
