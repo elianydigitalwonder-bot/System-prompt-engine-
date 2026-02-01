@@ -8,32 +8,22 @@ const openai = new OpenAI({
 
 export async function POST(req) {
   try {
-    // 1. Check API key
+    // Safety check: make sure the key exists on the server
     if (!process.env.OPENAI_API_KEY) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "OPENAI_API_KEY missing in environment variables",
-        }),
+      return Response.json(
+        { ok: false, error: "OPENAI_API_KEY missing in Vercel env vars" },
         { status: 500 }
       );
     }
 
-    // 2. Read prompt
     const body = await req.json();
     const prompt = body?.prompt?.trim();
 
     if (!prompt) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "Prompt is missing",
-        }),
-        { status: 400 }
-      );
+      return Response.json({ ok: false, error: "Missing prompt" }, { status: 400 });
     }
 
-    // 3. Generate image
+    // Generate image as base64 so the browser can show it instantly
     const result = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
@@ -43,30 +33,19 @@ export async function POST(req) {
     const b64 = result?.data?.[0]?.b64_json;
 
     if (!b64) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "No image returned from OpenAI",
-        }),
+      return Response.json(
+        { ok: false, error: "No image returned from OpenAI" },
         { status: 500 }
       );
     }
 
-    // 4. Return image
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        imageUrl: `data:image/png;base64,${b64}`,
-      }),
-      { status: 200 }
-    );
+    return Response.json({
+      ok: true,
+      imageUrl: `data:image/png;base64,${b64}`,
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({
-        ok: false,
-        error: err?.message || "Server error",
-        hint: "Check OPENAI_API_KEY and redeploy",
-      }),
+    return Response.json(
+      { ok: false, error: err?.message || "Server error" },
       { status: 500 }
     );
   }
