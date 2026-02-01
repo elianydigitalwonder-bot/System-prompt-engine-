@@ -9,6 +9,13 @@ const openai = new OpenAI({
 
 export async function POST(req) {
   try {
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { ok: false, error: "OPENAI_API_KEY missing" },
+        { status: 500 }
+      );
+    }
+
     const { prompt } = await req.json();
 
     if (!prompt || !prompt.trim()) {
@@ -18,7 +25,7 @@ export async function POST(req) {
       );
     }
 
-    const image = await openai.images.generate({
+    const result = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
       size: "1024x1024",
@@ -26,14 +33,17 @@ export async function POST(req) {
 
     return NextResponse.json({
       ok: true,
-      image: image.data[0].b64_json,
+      image: result.data[0].b64_json,
     });
 
   } catch (err) {
-    console.error("IMAGE ERROR:", err);
+    console.error("IMAGE ERROR FULL:", err);
 
     return NextResponse.json(
-      { ok: false, error: "Image generation failed" },
+      {
+        ok: false,
+        error: err?.message || "Image generation failed",
+      },
       { status: 500 }
     );
   }
