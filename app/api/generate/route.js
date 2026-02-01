@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
@@ -9,12 +9,12 @@ const openai = new OpenAI({
 
 export async function POST(req) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(
-        { ok: false, error: "OPENAI_API_KEY missing" },
-        { status: 500 }
-      );
-    }
+    // 🔎 DEBUG – confirm key is available
+    console.log("KEY EXISTS:", !!process.env.OPENAI_API_KEY);
+    console.log(
+      "KEY PREFIX:",
+      process.env.OPENAI_API_KEY?.slice(0, 7)
+    );
 
     const { prompt } = await req.json();
 
@@ -25,7 +25,7 @@ export async function POST(req) {
       );
     }
 
-    const result = await openai.images.generate({
+    const image = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
       size: "1024x1024",
@@ -33,11 +33,10 @@ export async function POST(req) {
 
     return NextResponse.json({
       ok: true,
-      image: result.data[0].b64_json,
+      image: image.data[0].b64_json,
     });
-
   } catch (err) {
-    console.error("IMAGE ERROR FULL:", err);
+    console.error("IMAGE ERROR:", err);
 
     return NextResponse.json(
       {
