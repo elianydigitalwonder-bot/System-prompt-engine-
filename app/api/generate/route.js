@@ -1,100 +1,94 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  try {
-    const body = await req.json();
+  const body = await req.json();
 
-    const {
-      // Identity
-      ethnicity = "User-selected",
-      skinTone = "User-selected",
-      ageGroup = "30-year-old",
-      genderPresentation = "woman",
+  const {
+    // Identity
+    ethnicity = "User-selected",
+    skinTone = "User-selected",
+    ageGroup = "adult",
+    genderPresentation = "woman",
 
-      // Hair
-      hairType = "User-selected",
-      hairStyle = "User-selected",
-      hairColor = "User-selected",
+    // Hair
+    hairType = "User-selected",
+    hairStyle = "User-selected",
+    hairColor = "User-selected",
 
-      // Face / beauty
-      lipStyle = "User-selected",
-      nailStyle = "none",
-      makeupLevel = "natural",
+    // Beauty
+    lipStyle = "User-selected",
+    nailStyle = "none",
+    makeupLevel = "natural",
 
-      // Fashion
-      fashionEra = "modern",
-      vibe = "stylish",
-      outfitCategory = "User-selected",
-      artStyle = "semi-realistic airbrushed chibi",
+    // Fashion
+    fashionEra = "modern",
+    vibe = "stylish",
+    outfitCategory = "User-selected",
+    artStyle = "semi-realistic airbrushed chibi",
 
-      // Clothing & cultural styling
-      clothingStyle = "User-selected",
-      modestAttire = "none",
-      muslimAttire = "none",
-      bollywoodOutfit = "none",
-      culturalNotes = "none",
+    // Cultural & religious attire
+    muslimAttire = "none",        // hijab | abaya | none
+    christianAttire = "none",     // modest_dress | none
+    catholicAttire = "none",      // modest_dress | none
+    bollywoodOutfit = "none",     // lehenga | saree | anarkali | none
 
-      // Footwear
-      footwear = "User-selected",
+    // Footwear
+    footwear = "User-selected",
 
-      // Accessories
-      accessories = "User-selected",
+    // Accessories
+    accessories = "User-selected",
 
-      // Doggy bag glamour
-      doggyBagGlamour = false,
-      dogCarrierStyle = "User-selected",
-      dogStyleDetails = "User-selected",
+    // Doggy bag glamour
+    doggyBagGlamour = false,
+    dogCarrierStyle = "User-selected",
+    dogStyleDetails = "User-selected",
 
-      // Faith jewelry
-      faithJewelry = "none",
-      faithJewelryItems = "none",
+    // Faith jewelry
+    faithJewelry = "none",        // christian | catholic | none
+    faithJewelryItems = "none",
 
-      // Action / props
-      actionPose = "none",
-      prop = "none",
+    // Action / props
+    actionPose = "none",
+    prop = "none",
 
-      // Output
-      renderFormat = "waist-up",
-      transparentBackground = false,
-    } = body;
+    // Render
+    renderFormat = "waist-up",    // waist-up | full-body | sticker
+    transparentBackground = false
+  } = body;
 
-    const prompt = `
+  const prompt = `
 A high-quality semi-realistic chibi character illustration
-(cute proportions, NOT an oversized head).
+(cute, balanced proportions — NOT an oversized head).
 
-Body proportions:
-- Feminine silhouette with defined waist
-- Balanced chibi proportions, elegant and stylized
-- Render format: ${renderFormat}
+Body & pose:
+- Feminine silhouette with a defined waist
+- ${renderFormat} composition
+- Confident, elegant posture
 
 Character details:
-- Age group: ${ageGroup}
-- Gender presentation: ${genderPresentation}
 - Ethnicity: ${ethnicity}
 - Skin tone: ${skinTone}
+- Age group: ${ageGroup}
+- Gender presentation: ${genderPresentation}
+
+Hair & beauty:
 - Hair texture: ${hairType}
 - Hair style: ${hairStyle}
 - Hair color: ${hairColor}
-
-Facial & beauty details:
-- Large expressive eyes with glossy highlights
 - Makeup level: ${makeupLevel}
 - Lip style: ${lipStyle}
 - Nail style: ${nailStyle}
 
-Fashion era & vibe:
+Fashion & vibe:
 - Fashion era: ${fashionEra}
 - Overall vibe: ${vibe}
-
-Clothing & outfit:
 - Outfit category: ${outfitCategory}
-- Clothing style notes: ${clothingStyle}
 
-Modest & cultural attire:
-- Modest attire: ${modestAttire}
+Cultural & religious attire (only if selected):
 - Muslim attire: ${muslimAttire}
-- Bollywood outfit: ${bollywoodOutfit}
-- Cultural notes: ${culturalNotes}
+- Christian attire: ${christianAttire}
+- Catholic attire: ${catholicAttire}
+- Bollywood style: ${bollywoodOutfit}
 
 Footwear:
 - ${footwear}
@@ -102,42 +96,30 @@ Footwear:
 Accessories:
 - ${accessories}
 
-Doggy Bag Glamour:
+Faith jewelry (only if requested):
+- ${faithJewelry}
+- Items: ${faithJewelryItems}
+
+Doggy bag glamour:
 - Enabled: ${doggyBagGlamour}
-- Dog carrier style: ${dogCarrierStyle}
-- Dog styling details: ${dogStyleDetails}
+- Carrier style: ${dogCarrierStyle}
+- Dog styling: ${dogStyleDetails}
 
-Faith-based jewelry (ONLY if selected):
-- Faith type: ${faithJewelry}
-- Jewelry items: ${faithJewelryItems}
-
-Action & lifestyle:
-- Pose/action: ${actionPose}
+Action & props:
+- Pose: ${actionPose}
 - Prop: ${prop}
-
-Sticker & render rules:
-- Clean bold outlines if sticker format
-- Simplified shading
-- Transparent background: ${transparentBackground}
 
 Art direction:
 - Style: ${artStyle}
 - Soft airbrushed shading
-- Clean linework
-- Premium lighting
-- No text
-- No watermark
-- No distortion
+- Clean premium linework
+- Editorial lighting
+- No text, no watermark, no distortion
+- Transparent background: ${transparentBackground}
 `.trim();
 
-    return NextResponse.json({
-      success: true,
-      prompt,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    success: true,
+    prompt
+  });
 }
