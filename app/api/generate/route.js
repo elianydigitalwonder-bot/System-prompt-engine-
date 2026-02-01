@@ -1,51 +1,61 @@
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export const runtime = "nodejs";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req) {
   try {
-    // Safety check: make sure the key exists on the server
+    // 1. Check API key
     if (!process.env.OPENAI_API_KEY) {
-      return Response.json(
-        { ok: false, error: "OPENAI_API_KEY missing in Vercel env vars" },
+      return NextResponse.json(
+        { ok: false, error: "OPENAI_API_KEY missing in environment variables" },
         { status: 500 }
       );
     }
 
+    // 2. Read body
     const body = await req.json();
-    const prompt = body?.prompt?.trim();
+    const prompt = body?.prompt;
 
-    if (!prompt) {
-      return Response.json({ ok: false, error: "Missing prompt" }, { status: 400 });
+    if (!prompt || !prompt.trim()) {
+      return NextResponse.json(
+        { ok: false, error: "Prompt is required" },
+        { status: 400 }
+      );
     }
 
-    // Generate image as base64 so the browser can show it instantly
+    // 3. Init OpenAI
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // 4. Generate image
     const result = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
       size: "1024x1024",
     });
 
-    const b64 = result?.data?.[0]?.b64_json;
+    const imageBase64 = result.data[0].b64_json;
 
-    if (!b64) {
-      return Response.json(
-        { ok: false, error: "No image returned from OpenAI" },
-        { status: 500 }
-      );
+    if (!imageBase64) {
+      throw new Error("No image returned from OpenAI");
     }
 
-    return Response.json({
+    // 5. Return image
+    return NextResponse.json({
       ok: true,
-      imageUrl: `data:image/png;base64,${b64}`,
+      imageUrl: `data:image/png;base64,${imageBase64}`,
     });
   } catch (err) {
-    return Response.json(
-      { ok: false, error: err?.message || "Server error" },
+    console.error("IMAGE GENERATION ERROR:", err);
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: err.message || "Server error",
+        hint: "Check OPENAI_API_KEY and redeploy",
+      },
       { status: 500 }
     );
   }
